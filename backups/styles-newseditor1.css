@@ -1,0 +1,153 @@
+/* ===== News Editor styles ===== */
+.ne-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+.ne-card {
+  background: #101114;
+  border: 1px solid #2a2d34;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.ne-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  color: #fff;
+}
+.ne-subtitle {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #e9ecf1;
+}
+.ne-muted {
+  color: #9aa2b1;
+  margin: 6px 0 12px;
+}
+.ne-label {
+  display: block;
+  color: #cfd6e4;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.ne-input,
+.ne-textarea,
+.ne-select {
+  width: 100%;
+  box-sizing: border-box;
+  background: #0c0d10;
+  color: #e9ecf1;
+  border: 1px solid #2a2d34;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.ne-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+.ne-select {
+  appearance: none;
+}
+.ne-btn {
+  appearance: none;
+  border: 1px solid #495061;
+  background: #2c6bed;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.05s ease, opacity 0.2s ease;
+}
+.ne-btn:hover {
+  opacity: 0.95;
+}
+.ne-btn:active {
+  transform: translateY(1px);
+}
+.ne-btn-secondary {
+  background: #273043;
+  border-color: #485167;
+}
+.ne-btn-ghost {
+  background: transparent;
+  color: #cfd6e4;
+  border-color: #2a2d34;
+}
+.ne-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 6px;
+}
+.ne-status {
+  color: #9bd38f;
+  font-size: 13px;
+}
+.ne-error {
+  color: #ff8e8e;
+}
+.ne-help {
+  color: #9aa2b1;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.ne-auth-row {
+  display: flex;
+  gap: 10px;
+}
+.ne-author-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.ne-inline-add {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.ne-form-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.ne-list-wrap {
+  display: grid;
+  gap: 12px;
+}
+.ne-item {
+  border: 1px solid #2a2d34;
+  border-radius: 10px;
+  padding: 12px;
+  background: #0f1116;
+}
+.ne-item-head {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr minmax(260px, 340px);
+  align-items: start;
+}
+.ne-item-meta {
+  font-size: 12px;
+  color: #9aa2b1;
+}
+.ne-item-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr minmax(220px, 320px);
+  margin-top: 8px;
+}
+.ne-item-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}

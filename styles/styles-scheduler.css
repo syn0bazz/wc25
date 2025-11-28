@@ -1,0 +1,377 @@
+/* COLOR SCHEME */
+.terminfinder {
+  --status-0: #4c6988;
+  --status-1: #5b6b8e;
+  --status-2: #696b93;
+  --status-3: #766b97;
+  --status-4: #836d9d;
+  --status-5: #926ea2;
+  --status-6: #9e6ea7;
+  --status-7: #ad70ad;
+  --status-8: #c372b6;
+  --status-9: #d075c2;
+}
+
+/*
+.terminfinder {
+  --status-0: #ac7070;
+  --status-1: #b06764;
+  --status-2: #b47a5e;
+  --status-3: #b68c56;
+  --status-4: #b69f4f;
+  --status-5: #b1b14d;
+  --status-6: #9dba59;
+  --status-7: #82bb66;
+  --status-8: #68bb73;
+  --status-9: #4bbb80;
+}
+*/
+
+/* SCROLLBAR */
+/*width*/
+::-webkit-scrollbar {
+  width: auto;
+}
+
+/*track*/
+::-webkit-scrollbar-track {
+  background: #253542;
+}
+
+/*thumb*/
+::-webkit-scrollbar-thumb {
+  background: rgb(83, 127, 164);
+  border-radius: 999px;
+  border: 4px solid #253542;
+}
+
+/*thumb hover*/
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 999px;
+}
+.tf-inner {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.w-tab-content {
+  overflow: visible;
+}
+
+/* AUTH */
+.terminfinder [data-auth="signed-in"],
+.terminfinder.is--signed-in [data-auth="signed-out"] {
+  visibility: hidden;
+}
+.terminfinder.is--signed-in [data-auth="signed-in"] {
+  visibility: visible;
+}
+.terminfinder .tf-login[data-auth="signed-in"],
+.terminfinder.is--signed-in .tf-login[data-auth="signed-out"] {
+  display: none;
+}
+.terminfinder.is--signed-in .tf-login[data-auth="signed-in"] {
+  display: flex;
+}
+.tf-progress-bar {
+  background: linear-gradient(
+    90deg,
+    var(--blau--hell-40) 0%,
+    var(--blau--hell) 75%,
+    var(--violett--highlight) 100%
+  );
+}
+
+/* NOTIFICATIONS */
+.tf-section.tf-section-notification {
+  text-wrap: balance;
+}
+
+/* CALENDAR */
+.tf-calendar-week-title {
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  display: flex;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  align-items: center;
+  justify-content: center;
+}
+.tf-calendar-week .tf-calendar-day:nth-child(7) .tf-calendar-day-title,
+.tf-calendar-week .tf-calendar-day:nth-child(8) .tf-calendar-day-title {
+  color: var(--violett--text-sekundär);
+}
+.tf-calendar-header {
+  padding-left: calc(48px + 6px + 33%);
+}
+.tf-calendar-select > option {
+  background: var(--blau--dunkel);
+  cursor: pointer;
+}
+
+.tf-calendar-day.is--unavailable .tf-calendar-select,
+.tf-calendar-day.is--unavailable .tf-calendar-slot-wrap,
+.tf-calendar-day.is--unavailable .tf-calendar-arrow {
+  display: none;
+}
+
+.tf-calendar-timestamp.is--flash {
+  transition: color 0.3s ease;
+}
+.tf-calendar-timestamp.is--ok {
+  color: #00b37e;
+}
+.tf-calendar-timestamp.is--error {
+  color: #d83b01;
+}
+
+/* NOTIFICATIONS */
+.tf-section.tf-section-notification.is--template {
+  display: none !important;
+}
+.tf-section.tf-section-notification.is--important {
+  background-color: var(--violett--hell-40);
+}
+.tf-section.tf-section-notification.is--important
+  [data-notifications="button"] {
+  background-color: var(--violett--hell);
+}
+.tf-section.tf-section-notification.is--important .tf-notification-stripe {
+  background-color: var(--violett--hell);
+  width: 12px;
+}
+.tf-section.tf-section-notification.is--important .tf-notification-title {
+  color: var(--violett--text-offwhite);
+}
+.tf-section.tf-section-notification.is--important .tf-notification-descr {
+  color: var(--violett--text-sekundär);
+}
+.tf-section.tf-section-notification.is--important .tf-notification-exclamation {
+  display: inline-block;
+}
+
+/* SUGGESTOR */
+[data-suggestor="wrap"] [data-suggestor="active"],
+[data-suggestor="wrap"] [data-suggestor="game-active"],
+[data-suggestor="wrap"].is--active [data-suggestor="game-active-empty"] {
+  display: none;
+}
+[data-suggestor="wrap"].is--active [data-suggestor="game-active"] {
+  display: grid;
+}
+[data-suggestor="wrap"].is--active [data-suggestor="active"],
+[data-suggestor="wrap"] [data-suggestor="game-active-empty"] {
+  display: block;
+}
+
+[data-suggestor="wrap"] [data-suggestor="game-select"],
+[data-suggestor="wrap"].is--active [data-suggestor="game-active-card"],
+[data-suggestor="wrap"].is--active [data-suggestor="game-select"]:hover {
+  opacity: 1;
+}
+[data-suggestor="wrap"].is--active [data-suggestor="game-select"],
+[data-suggestor="wrap"] [data-suggestor="game-active-card"] {
+  opacity: 0.67;
+}
+.tf-calendar-day.tf-calendar-day--suggestor.is--active .tf-calendar-expand {
+  max-height: 150px;
+}
+.tf-calendar-day.tf-calendar-day--suggestor.is--active .tf-calendar-arrow {
+  transform: rotateZ(180deg);
+}
+.tf-calendar-day.tf-calendar-day--suggestor:has(
+    .tf-calendar-day-trigger:hover
+  ) {
+  background-color: var(--blau--hell-50);
+}
+.tf-calendar-day.tf-calendar-day--suggestor:has(.tf-calendar-day-trigger:hover)
+  .tf-calendar-arrow {
+  background-color: var(--blau--hell);
+  border-color: var(--blau--hell);
+}
+.tf-calendar-day .tf-calendar-slot.is--0 {
+  background-color: var(--status-0);
+  color: var(--blau--text-sekundär);
+}
+.tf-calendar-slot.is--1 {
+  background-color: var(--status-1);
+}
+.tf-calendar-slot.is--2 {
+  background-color: var(--status-2);
+}
+.tf-calendar-slot.is--3 {
+  background-color: var(--status-3);
+}
+.tf-calendar-slot.is--4 {
+  background-color: var(--status-4);
+}
+.tf-calendar-slot.is--5 {
+  background-color: var(--status-5);
+}
+.tf-calendar-slot.is--6 {
+  background-color: var(--status-6);
+}
+.tf-calendar-slot.is--7 {
+  background-color: var(--status-7);
+}
+.tf-calendar-slot.is--8 {
+  background-color: var(--status-8);
+}
+.tf-calendar-slot.is--9 {
+  background-color: var(--status-9);
+  border-color: var(--violett--inaktiv);
+}
+.tf-calendar-slot.is--taken {
+  opacity: 0.75;
+  pointer-events: none;
+}
+.tf-calendar-slot.is--taken .tf-button-svg {
+  display: none;
+}
+
+/* SUGGESTION */
+[data-suggestion="wrap"] [data-suggestion="suggestion"],
+[data-suggestion="wrap"].is--active [data-suggestion="empty"] {
+  display: none;
+}
+[data-suggestion="wrap"].is--active [data-suggestion="suggestion"] {
+  display: flex;
+}
+[data-suggestion="wrap"] [data-suggestion="empty"] {
+  display: flex;
+}
+#active-suggestions .tf-suggestion-slot {
+  margin-left: 0;
+}
+
+/* GAMES */
+.tf-game-status {
+  text-wrap: balance;
+}
+.tf-section.is--scheduled,
+.tf-section.is--waiting {
+  opacity: 0.67;
+}
+.tf-section.is--notstarted,
+.tf-section.is--reply {
+  border: 1px solid var(--violett--hell-70);
+}
+.tf-section.is--scheduled [data-game-status="suggestions"],
+.tf-section.is--scheduled [data-game-status="button"] {
+  display: none;
+}
+.tf-section.is--waiting [data-suggestion="button"],
+.tf-section.is--waiting [data-game-status="button"] {
+  display: none;
+}
+.tf-section.is--notstarted [data-game-status="suggestions"] {
+  display: none;
+}
+
+/* PRODUCTION */
+.tf-game-team .avatar {
+  max-height: 48px;
+}
+.tf-section.is--cfwarning .tf-game-date-warning {
+  display: inline-block;
+}
+.tf-section.is--staffed .tf-button--roles {
+  display: none;
+}
+[data-production="button"],
+[data-role] {
+  display: none;
+}
+[data-production="list"].is--streamer
+  [data-production-role="streamer"]:not(.is--staffed)
+  [data-production="button"],
+.tf-tabinner.tf-tabinner--production.is--caster
+  [data-production-role="caster"]:not(.is--staffed)
+  [data-production="button"],
+.tf-tabinner.tf-tabinner--production.is--spielleiter
+  [data-production-role="spielleiter"]:not(.is--staffed)
+  [data-production="button"] {
+  display: block;
+}
+[data-production="list"].is--streamer [data-role="streamer"],
+[data-production="list"].is--caster [data-role="caster"],
+[data-production="list"].is--spielleiter [data-role="spielleiter"] {
+  display: flex;
+}
+[data-production="list"]:not(.is--streamer)
+  [data-production-role="streamer"]:not(.is--staffed),
+[data-production="list"]:not(.is--caster)
+  [data-production-role="caster"]:not(.is--staffed),
+[data-production="list"]:not(.is--spielleiter)
+  [data-production-role="spielleiter"]:not(.is--staffed) {
+  opacity: 0.67;
+}
+
+/* CALENDAR EVENTS */
+/* Empty */
+[data-events="wrap"] [data-events="empty"],
+[data-events="wrap"].is--empty [data-events="divider"] {
+  display: none;
+}
+[data-events="wrap"].is--empty [data-events="empty"] {
+  display: block;
+}
+[data-events="wrap"] [data-events="divider"] {
+  display: grid;
+}
+/* Past */
+.tf-section[data-game].is--past {
+  opacity: 0.67;
+}
+.tf-section[data-game].is--past [data-events="calloff"] {
+  display: none;
+  pointer-events: none;
+}
+/* Roles visibility: Pills */
+[data-events="role-player"],
+[data-events="role-streamer"],
+[data-events="role-caster"],
+[data-events="role-spielleiter"] {
+  display: none;
+}
+.tf-section[data-game].is--player [data-events="role-player"],
+.tf-section[data-game].is--streamer [data-events="role-streamer"],
+.tf-section[data-game].is--caster [data-events="role-caster"],
+.tf-section[data-game].is--spielleiter [data-events="role-spielleiter"] {
+  display: flex;
+}
+/* Roles visibility: Form */
+.tf-calloff-role {
+  opacity: 0.33;
+  pointer-events: none;
+  cursor: default;
+}
+.tf-section[data-game].is--player .tf-calloff-role:has([data-calloff="game"]),
+.tf-section[data-game].is--streamer
+  .tf-calloff-role:has([data-calloff="streamer"]),
+.tf-section[data-game].is--caster .tf-calloff-role:has([data-calloff="caster"]),
+.tf-section[data-game].is--spielleiter
+  .tf-calloff-role:has([data-calloff="spielleiter"]) {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+/* Accordion */
+.tf-calloff-inner {
+  border: 1px solid transparent;
+  box-shadow: 0px 0px 0 0 transparent;
+}
+.tf-section[data-game].is--expanded .tf-calloff-inner {
+  max-height: 800px;
+  border: 1px solid var(--violett--hell);
+  box-shadow: 2px 2px 0 0 var(--violett--hell-70);
+  margin: 24px -24px -24px -24px;
+}
+.tf-section[data-game].is--expanded .tf-calloff-arrow {
+  transform: rotateZ(180deg);
+}
+/* Warning */
+.tf-section[data-game].is--cfwarning [data-calloff="warning"] {
+  opacity: 1;
+  max-height: 400px;
+  margin: 24px 0 12px 0;
+}

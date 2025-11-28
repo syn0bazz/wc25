@@ -1,0 +1,130 @@
+/* === HERO === */
+/* --- Spielinfo --- */
+.sectitle.sectitle--gamehero .sectitle_hand {
+  font-size: 120px;
+}
+/* --- gamemap --- */
+.gamemap_kreis {
+  background: linear-gradient(
+      90deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(254, 148, 238, 0.4) 120%
+    ),
+    #151515;
+}
+/* Highlight */
+.gamemap.is--highlight .gamemap_inner {
+  background: linear-gradient(
+    90deg,
+    var(--violett--hell),
+    var(--violett--hell-70)
+  );
+  border-color: var(--violett--highlight);
+}
+.gamemap.is--highlight .gamemap_txt-secondary {
+  color: var(--violett--text-sekundär);
+}
+.gamemap.is--highlight .gamemap_kreis {
+  background: linear-gradient(
+      270deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(254, 148, 238, 0.4) 100%
+    ),
+    #151515;
+}
+.gamemap.is--highlight .gamemap_emblem {
+  filter: drop-shadow(3px 3px 0px var(--violett--dunkel));
+}
+.gamemap.is--notplayed {
+  opacity: 0.5;
+}
+@media only screen and (max-width: 991px) {
+  .gamemap_txt-label {
+    display: none;
+  }
+}
+@media screen and (max-width: 570px) {
+  .gameh_players {
+    display: none;
+  }
+}
+
+/* === KARTENWAHL === */
+/* MASK */
+@media screen and (min-width: 769px) {
+  .kartenwahl_karte {
+    object-fit: cover;
+
+    /* Verlaufsmaske wird auf die oberen 10% angewendet */
+    mask-image: linear-gradient(black 96%, transparent 96%),
+      url("https://cdn.prod.website-files.com/66d5abacd1e75804e6fc3f44/6703cf2dff9b2f415ed6da1c_kartenbar_mask-bottom.svg");
+    -webkit-mask-image: linear-gradient(black 96%, transparent 96%),
+      url("https://cdn.prod.website-files.com/66d5abacd1e75804e6fc3f44/6703cf2dff9b2f415ed6da1c_kartenbar_mask-bottom.svg");
+
+    /* Die Größe der Masken wird für die oberen und unteren Bereiche angepasst */
+    mask-size: 100% auto, auto auto;
+    -webkit-mask-size: 100% auto, auto auto;
+
+    /* Maskenpositionen für oben und unten */
+    mask-position: bottom, bottom;
+    -webkit-mask-position: top, bottom;
+
+    /* Keine Wiederholung der Masken */
+    mask-repeat: no-repeat, repeat-x;
+    -webkit-mask-repeat: no-repeat, repeat-x;
+
+    /* Beide Masken überlagern sich */
+    mask-composite: add;
+    -webkit-mask-composite: add;
+  }
+}
+
+/* TYPE */
+.kartenwahl .kartenwahl_type {
+  display: none;
+}
+.kartenwahl.is--ban .kartenwahl_type.is--ban,
+.kartenwahl.is--pick .kartenwahl_type.is--vote,
+.kartenwahl.is--decider .kartenwahl_type.is--decider {
+  display: block;
+}
+.kartenwahl.is--decider .kartenwahl_team,
+.kartenwahl.is--decider .kartenwahl_avatar {
+  display: none;
+}
+.kartenwahl.is--ban .kartenwahl_stripes {
+  display: block;
+}
+.kartenwahl.is--ban {
+  opacity: 0.67;
+}
+.kartenwahl.is--pick,
+.kartenwahl.is--decider {
+  box-shadow: 4px 4px 0px 0px var(--violett--dunkel);
+}
+.kartenwahl.is--pick .kartenwahl_kreis,
+.kartenwahl.is--decider .kartenwahl_kreis {
+  background: linear-gradient(
+      90deg,
+      rgba(254, 148, 238, 0.4) 0%,
+      rgba(139, 200, 255, 0.4) 100%
+    ),
+    #151515;
+  border: 4px solid var(--violett--highlight);
+}
+.kartenwahl.is--pick .kartenwahl_avatar,
+.kartenwahl.is--decider .kartenwahl_avatar {
+  border: 3px solid var(--violett--highlight);
+}
+.kartenwahl.is--pick .kartenwahl_team,
+.kartenwahl.is--decider .kartenwahl_team {
+  color: var(--violett--text-sekundär);
+}
+
+/* HIDE UNTIL PLAYED */
+.page_main .section {
+  display: none;
+}
+.page_main.is--played .section {
+  display: block;
+}

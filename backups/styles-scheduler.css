@@ -1,0 +1,304 @@
+/* styles-scheduler.css */
+/* =============================================================================
+   Wintercup Wingman — Scheduler Dashboard
+   Aesthetic: cozy winter vibes, clean cards, playful micro-interactions.
+   Compatible with the updated script-scheduler.js
+   ========================================================================== */
+
+/* Base */
+.is-hidden {
+  display: none !important;
+}
+.wc-dashboard {
+  display: grid;
+  gap: 16px;
+  color: #e8eef3;
+}
+.wc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, #1b2430, #131a22);
+  border-radius: 14px;
+}
+.wc-team-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: #253244;
+  border-radius: 999px;
+}
+.wc-team-chip img {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+.wc-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2b3a4e;
+}
+.btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #3aa4ff;
+  color: #0b1116;
+}
+.btn-secondary {
+  background: #2b394c;
+  color: #e8eef3;
+}
+.btn-ghost {
+  background: transparent;
+  border-color: #2e3c52;
+  color: #e8eef3;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: #ff59c7;
+  color: #0b1116;
+  margin-left: -6px;
+  margin-top: -10px;
+  position: relative;
+  top: -6px;
+  right: 10px;
+}
+
+/* Hero */
+.wc-hero {
+  display: grid;
+}
+.wc-hero-card {
+  background: radial-gradient(
+      120% 100% at 0% 0%,
+      rgba(255, 89, 199, 0.14),
+      transparent 60%
+    ),
+    linear-gradient(180deg, #131a22, #0c1016);
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #233046;
+}
+.progress {
+  width: 100%;
+  height: 10px;
+  background: #1d2735;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4bd2ff, #8ae6b1);
+  transition: width 240ms ease;
+}
+.progress__meta {
+  margin-top: 8px;
+  opacity: 0.85;
+}
+
+/* Tabs */
+.wc-tabs {
+  display: flex;
+  gap: 8px;
+}
+.tab {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #1b2430;
+  border: 1px solid #2b394c;
+  color: #cfe7fb;
+  cursor: pointer;
+}
+.tab.is-active {
+  background: #2b394c;
+}
+
+/* Panels & cards */
+.panel {
+  display: none;
+}
+.panel.is-active {
+  display: block;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.card {
+  background: #101721;
+  border: 1px solid #2b394c;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/* Availability */
+.wc-availability-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #2e3c52;
+  cursor: default;
+}
+.chip::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4bd2ff;
+}
+.chip--ok::before {
+  background: #36e39b;
+}
+.chip--maybe::before {
+  background: #f6c24e;
+}
+.chip--no::before {
+  background: #f08b3e;
+}
+.chip--busy::before {
+  background: #ff5a7a;
+}
+
+.wc-grid {
+  display: grid;
+  gap: 8px;
+}
+.wc-day {
+  border: 1px dashed #263448;
+  border-radius: 10px;
+  padding: 8px;
+  background: #0e151e;
+}
+.wc-day__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  opacity: 0.8;
+  font-size: 13px;
+}
+.wc-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 6px;
+}
+.slot {
+  border: 1px solid #2b394c;
+  background: #172332;
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+.slot:hover {
+  transform: translateY(-1px);
+}
+.slot__time {
+  font-weight: 600;
+}
+.slot__score {
+  font-size: 12px;
+  opacity: 0.8;
+}
+.slot--taken {
+  background: #20172a;
+  border-color: #5d3d6e;
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+.slot--blocked {
+  background: #1b1824;
+  border-color: #4b3a58;
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+.slot--selected {
+  outline: 2px solid #4bd2ff;
+}
+
+/* Inbox & Scheduler */
+.item {
+  display: grid;
+  gap: 6px;
+}
+.item__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.item .actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* Auth gate */
+.wc-auth-gate {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+}
+.wc-auth-msg {
+  margin-top: 10px;
+  color: #ff9999;
+}
+
+/* Toasts */
+.wc-toasts {
+  position: fixed;
+  bottom: 14px;
+  right: 14px;
+  display: grid;
+  gap: 8px;
+  z-index: 9999;
+}
+.toast {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 220ms ease;
+  background: #0c1118;
+  border: 1px solid #2d3a4e;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #e8eef3;
+  max-width: 320px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+.toast--error {
+  border-color: #ff5a7a;
+}
+.toast.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}

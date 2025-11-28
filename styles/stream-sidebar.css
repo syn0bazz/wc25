@@ -1,0 +1,106 @@
+.team_mask {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mask that cuts off the bottom */
+.team_mask.team_mask--1 {
+  mask-image: linear-gradient(
+      black calc(100% - 160px),
+      transparent calc(100% - 160px)
+    ),
+    url("https://cdn.prod.website-files.com/67f4e291533337f5de0b8344/68f2a5204e674ab0ccc4ef72_e92f0637a2b33744529b2c40da7f629a_wc25-seitenleiste-spiel-divider2-1.svg");
+  -webkit-mask-image: linear-gradient(
+      black calc(100% - 160px),
+      transparent calc(100% - 160px)
+    ),
+    url("https://cdn.prod.website-files.com/67f4e291533337f5de0b8344/68f2a5204e674ab0ccc4ef72_e92f0637a2b33744529b2c40da7f629a_wc25-seitenleiste-spiel-divider2-1.svg");
+  mask-size: 100% auto, auto 160px;
+  -webkit-mask-size: 100% auto, auto 160px;
+  mask-position: top, bottom;
+  -webkit-mask-position: top, bottom;
+  mask-repeat: no-repeat, repeat-x;
+  -webkit-mask-repeat: no-repeat, repeat-x;
+  mask-composite: add;
+  -webkit-mask-composite: add;
+}
+
+/* Mask that cuts off the top */
+.team_mask.team_mask--2 {
+  mask-image: linear-gradient(transparent 160px, black 160px),
+    url("https://cdn.prod.website-files.com/67f4e291533337f5de0b8344/68f2a5204129fab77f014676_2dfe6a1eba3fe72069c8789d7c7c0c4c_wc25-seitenleiste-spiel-divider2-2.svg");
+  -webkit-mask-image: linear-gradient(transparent 160px, black 160px),
+    url("https://cdn.prod.website-files.com/67f4e291533337f5de0b8344/68f2a5204129fab77f014676_2dfe6a1eba3fe72069c8789d7c7c0c4c_wc25-seitenleiste-spiel-divider2-2.svg");
+  mask-size: 100% auto, auto 160px;
+  -webkit-mask-size: 100% auto, auto 160px;
+  mask-position: bottom, top;
+  -webkit-mask-position: bottom, top;
+  mask-repeat: no-repeat, repeat-x;
+  -webkit-mask-repeat: no-repeat, repeat-x;
+  mask-composite: add;
+  -webkit-mask-composite: add;
+}
+
+.gamev_team.gamev_team--sp:nth-child(1) .gamev_score {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 0px;
+}
+.gamev_team.gamev_team--sp:nth-child(2) .gamev_score {
+  border-bottom-right-radius: 16px;
+  border-top-right-radius: 0px;
+}
+.gamev_team.gamev_team--sp:nth-child(1) {
+  border-bottom-right-radius: 0px !important;
+}
+.gamev_team.gamev_team--sp:nth-child(2) {
+  border-top-right-radius: 0px !important;
+}
+.gamev_wrap.gamev_wrap--sp .game_score-txt {
+  display: block;
+}
+
+/* W1 / W2 */
+
+/* Is Win Allgemein gamev*/
+.gamev_wrap.gamev_wrap--sp.is--w1 .gamev_team,
+.gamev_wrap.gamev_wrap--sp.is--w2 .gamev_team {
+  background-color: var(--blau--hell-70);
+  color: var(--grau--offwhite);
+  text-shadow: 2px 2px 0px var(--blau--schatten-35);
+}
+.gamev_wrap.gamev_wrap--sp.is--w1 .avatar,
+.gamev_wrap.gamev_wrap--sp.is--w2 .avatar {
+  border: 1px solid var(--blau--highlight);
+  box-shadow: 3px 3px 0 0 var(--blau--dunkel);
+}
+.gamev_wrap.gamev_wrap--sp.is--w1 .gamev_kreis,
+.gamev_wrap.gamev_wrap--sp.is--w2 .gamev_kreis {
+  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.65) inset;
+}
+/* Is W1/W2 gamev*/
+.gamev_wrap.gamev_wrap--sp.is--w1 .gamev_team:nth-child(1),
+.gamev_wrap.gamev_wrap--sp.is--w2 .gamev_team:nth-child(2) {
+  background: var(--violett--hell);
+  border-color: var(--violett--highlight);
+  box-shadow: 4px 4px 0 0 var(--violett--dunkel);
+  text-shadow: 2px 2px 0px var(--violett--hell);
+}
+.gamev_wrap.gamev_wrap--sp.is--w1 .gamev_team:nth-child(1) .avatar,
+.gamev_wrap.gamev_wrap--sp.is--w2 .gamev_team:nth-child(2) .avatar {
+  border-color: var(--violett--highlight);
+  box-shadow: 3px 3px 0 0 var(--violett--dunkel);
+}
+.gamev_wrap.gamev_wrap--sp.is--w1 .gamev_team:nth-child(1) .gamev_kreis,
+.gamev_wrap.gamev_wrap--sp.is--w2 .gamev_team:nth-child(2) .gamev_kreis {
+  background: linear-gradient(
+      270deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(254, 148, 238, 0.4) 100%
+    ),
+    #151515;
+}
+.gamev_wrap.gamev_wrap--sp.is--w1 .gamev_team:nth-child(1) .sp_subline,
+.gamev_wrap.gamev_wrap--sp.is--w2 .gamev_team:nth-child(2) .sp_subline {
+  color: var(--violett--text-sekundär);
+}

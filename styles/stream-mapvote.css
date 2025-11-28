@@ -1,0 +1,280 @@
+/* --------------------
+GLOBAL PAGE LOGIC
+---------------------*/
+
+/* TOGGLE SECTIONS */
+.zg-wrap,
+.mv-wrap {
+  opacity: 0;
+}
+.mv-wrap {
+  transition: opacity 1s ease-in-out;
+}
+.page_wrap.is--zg .zg-wrap,
+.page_wrap.is--mv .mv-wrap {
+  pointer-events: auto;
+  opacity: 1;
+}
+.page_wrap.is--mv .zg-wrap,
+.page_wrap.is--zg .mv-wrap {
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* --------------------
+RANDOM GENERATOR
+---------------------*/
+
+/* TEAMS */
+.zg-team.zg-team--1 .zg-team-logo {
+  filter: drop-shadow(8px 8px 0px var(--violett--dunkel));
+}
+.zg-team.zg-team--2 .zg-team-logo {
+  filter: drop-shadow(8px 8px 0px var(--blau--dunkel));
+}
+
+/* TEAM ACTIVENESS */
+.zg-wrap > * {
+  transition: all 200ms ease-in-out;
+}
+
+/* POINTER */
+/* Default: gradient visible, solid hidden */
+.zg-pointer-gradient {
+  display: block;
+}
+.zg-pointer-solid {
+  display: none;
+}
+
+/* CURRENT = 1: violet solid only */
+[kw-randomizer="wrap"][kw-randomizer-current="1"] .zg-pointer-gradient {
+  display: none;
+}
+[kw-randomizer="wrap"][kw-randomizer-current="1"] .zg-pointer-solid {
+  display: block;
+  color: var(--violett--hell);
+}
+
+/* CURRENT = 2: blue solid only */
+[kw-randomizer="wrap"][kw-randomizer-current="2"] .zg-pointer-gradient {
+  display: none;
+}
+[kw-randomizer="wrap"][kw-randomizer-current="2"] .zg-pointer-solid {
+  display: block;
+  color: var(--blau--hell);
+}
+
+/* IS DONE */
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="1"]
+  .zg-team.zg-team--1
+  .zg-team-logo {
+  filter: drop-shadow(8px 8px 0px var(--violett--dunkel));
+  transform: scale(1.2);
+}
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="2"]
+  .zg-team.zg-team--2
+  .zg-team-logo {
+  filter: drop-shadow(8px 8px 0px var(--blau--dunkel));
+  transform: scale(1.2);
+}
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="1"]
+  .zg-team.zg-team--2
+  .zg-team-logo,
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="2"]
+  .zg-team.zg-team--1
+  .zg-team-logo {
+  transform: scale(0.8);
+  opacity: 0.67;
+}
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="1"]
+  .zg-team.zg-team--1 {
+  background-color: var(--violett--hell);
+}
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="2"]
+  .zg-team.zg-team--2 {
+  background-color: var(--blau--hell);
+}
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="1"]
+  .zg-team.zg-team--2
+  .zg-team-stripes,
+.zg-wrap[kw-randomizer-done="true"][kw-randomizer-current="2"]
+  .zg-team.zg-team--1
+  .zg-team-stripes {
+  opacity: 0.33;
+}
+
+/* ACTIVE SLICES */
+.kw-slice.kw-slice--team1.kw-slice--active {
+}
+.kw-slice.kw-slice--team1.kw-slice--active {
+}
+
+/* --------------------
+MAP VOTE
+---------------------*/
+
+/* STATUS */
+
+/* Logos */
+[mv-element="wrap"][mv-status-team="1"] [mv-status-logo="1"],
+[mv-element="wrap"][mv-status-team="2"] [mv-status-logo="2"] {
+  display: block;
+}
+[mv-element="wrap"][mv-status-team="1"] [mv-status-logo="2"],
+[mv-element="wrap"][mv-status-team="2"] [mv-status-logo="1"],
+[mv-element="wrap"][mv-status-team="0"] [mv-status-logo="2"],
+[mv-element="wrap"][mv-status-team="0"] [mv-status-logo="1"] {
+  display: none;
+}
+
+/* Status Text Color */
+[mv-element="wrap"][mv-status-phase="ban"] [mv-status="text"] {
+  color: var(--blau--text-sekundär);
+}
+[mv-element="wrap"][mv-status-phase="pick"] [mv-status="text"] {
+  color: var(--violett--text-sekundär);
+}
+[mv-element="wrap"][mv-status-phase="side"] [mv-status="text"] {
+  color: var(--violett--text-sekundär);
+}
+[mv-element="wrap"][mv-status-phase="done"] [mv-status="text"] {
+  color: var(--blau--inaktiv);
+}
+
+/* Selector */
+[mv-element="wrap"][mv-status-phase="side"] .mv-selector-inner {
+  transform: translateX(-318px);
+}
+[mv-element="wrap"][mv-status-phase="side"] [mv-element="select-maps"],
+[mv-element="wrap"]:not([mv-status-phase="side"]) [mv-element="select-side"] {
+  pointer-events: none;
+}
+
+/* SLOTS */
+
+/* Sichtbarkeit */
+[mv-element="slot"][mv-slot-number="0"] {
+  display: none;
+}
+[mv-element="slot"]:not([mv-slot-number="0"]) {
+  display: flex;
+}
+
+/* Reihenfolge */
+[mv-element="slot"][mv-slot-number="1"] {
+  order: 1;
+  z-index: 1;
+}
+[mv-element="slot"][mv-slot-number="2"] {
+  order: 2;
+  z-index: 2;
+}
+[mv-element="slot"][mv-slot-number="3"] {
+  order: 3;
+  z-index: 3;
+}
+[mv-element="slot"][mv-slot-number="4"] {
+  order: 4;
+  z-index: 4;
+}
+[mv-element="slot"][mv-slot-number="5"] {
+  order: 5;
+  z-index: 5;
+}
+[mv-element="slot"][mv-slot-number="6"] {
+  order: 6;
+  z-index: 6;
+}
+[mv-element="slot"][mv-slot-number="7"] {
+  order: 7;
+  z-index: 7;
+}
+
+/* Basis-Setup für alle Slots */
+[mv-element="slot"] {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 0;
+  max-width: 0;
+  overflow: hidden;
+  transition: flex-basis 0.6s ease-in-out, flex-grow 0.6s ease-in-out,
+    max-width 0.6s ease-in-out;
+}
+
+/* Alle aktiven Slots außer dem „last“:
+   immer genau 1/7 der Breite */
+[mv-element="slot"][mv-slot-is-last="false"]:not([mv-slot-number="0"]) {
+  flex-grow: 0;
+  flex-basis: calc(100% / 7);
+  max-width: calc(100% / 7);
+}
+
+/* Der „last“-Slot:
+   nimmt immer den gesamten Rest ein */
+[mv-element="slot"][mv-slot-is-last="true"]:not([mv-slot-number="0"]) {
+  flex-grow: 1; /* darf den Rest füllen */
+  flex-basis: 0; /* Basis = 0, damit wirklich nur der Rest verteilt wird */
+  max-width: 100%; /* Sicherheitsnetz für den Übergang */
+}
+
+/* Teams */
+[mv-element="slot"][mv-slot-team="1"] [mv-slot="logo-team-2"],
+[mv-element="slot"][mv-slot-team="2"] [mv-slot="logo-team-1"],
+[mv-element="slot"][mv-slot-team="0"] [mv-slot="logo-team-1"],
+[mv-element="slot"][mv-slot-team="0"] [mv-slot="logo-team-2"] {
+  display: none;
+}
+
+/* Pick vs. Ban */
+[mv-element="slot"][mv-slot-phase="pick"] .mv-slot-torn--default,
+[mv-element="slot"][mv-slot-phase="decider"] .mv-slot-torn--default {
+  color: var(--violett--hell);
+  opacity: 1;
+}
+[mv-element="slot"][mv-slot-phase="pick"] .mv-slot-torn--side,
+[mv-element="slot"][mv-slot-phase="decider"] .mv-slot-torn--side {
+  display: block;
+  color: var(--violett--dunkel);
+}
+[mv-element="slot"][mv-slot-phase="pick"] .mv-slot-stripes,
+[mv-element="slot"][mv-slot-phase="ban"] .mv-slot-bg:not(.mv-slot-bg--disabled),
+[mv-element="slot"][mv-slot-phase="pick"] .mv-slot-bg.mv-slot-bg--disabled {
+  visibility: hidden;
+}
+[mv-element="slot"][mv-slot-phase="pick"] .mv-slot-phase,
+[mv-element="slot"][mv-slot-phase="decider"] .mv-slot-phase {
+  color: var(--violett--offwhite);
+}
+[mv-element="slot"][mv-slot-phase="ban"]:not([mv-slot-is-last="true"])
+  .mv-slot-maplogo {
+  opacity: 0.67;
+}
+
+/* Side Pick */
+[mv-element="slot"][mv-slot-show-side="false"] .mv-slot-side {
+  transform: translateY(96px);
+  opacity: 0;
+}
+[mv-element="slot"][mv-slot-show-side="true"] .mv-slot-side {
+  transform: translateY(0px);
+  opacity: 1;
+}
+[mv-element="slot"][mv-slot-show-side="true"] .mv-slot-footer {
+  height: calc(230px + 72px);
+}
+
+/* SKELETON */
+
+[mv-skeleton="logo-1"],
+[mv-skeleton="logo-2"] {
+  display: none;
+}
+[mv-element="skeleton"][mv-skeleton-team="1"] [mv-skeleton="logo-1"],
+[mv-element="skeleton"][mv-skeleton-team="2"] [mv-skeleton="logo-2"] {
+  display: block;
+}
+
+[mv-element="skeleton"][mv-skeleton-phase="pick"] [mv-skeleton="text"] {
+  color: var(--violett--inaktiv);
+}

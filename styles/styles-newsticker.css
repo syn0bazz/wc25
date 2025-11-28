@@ -1,0 +1,41 @@
+.newsticker {
+  box-shadow: 4px 4px 0 0 var(--blau--schatten-35);
+}
+.newsticker_inner {
+  /* Mask creates visible center (5–95%) and fades at edges */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 5%,
+    rgba(0, 0, 0, 1) 95%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 5%,
+    rgba(0, 0, 0, 1) 95%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.newsticker--stream .newsticker {
+  box-shadow: none;
+  border-radius: 999px;
+  background-color: var(--blau--hell-stream);
+  font-size: 26px;
+  height: 60px;
+}
+.newsticker--stream {
+  max-width: 1300px;
+  margin: 10px 0px 0px 10px;
+}
+.newsticker--stream .newsticker_hand {
+  font-size: 60px;
+}
+.newsticker--stream .newsticker_header {
+  font-size: 28px;
+}

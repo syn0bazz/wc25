@@ -1,0 +1,44 @@
+/* --------------------
+GLOBAL PAGE LOGIC
+---------------------*/
+
+/* GENERAL STUFF */
+
+.sa-text {
+  text-wrap: balance;
+}
+
+/* --------------------
+AUTH
+---------------------*/
+
+.streamadmin [data-auth="signed-in"],
+.streamadmin.is--signed-in [data-auth="signed-out"] {
+  visibility: hidden;
+}
+.streamadmin.is--signed-in [data-auth="signed-in"] {
+  visibility: visible;
+}
+.streamadmin .tf-login[data-auth="signed-in"],
+.streamadmin.is--signed-in .tf-login[data-auth="signed-out"] {
+  display: none;
+}
+
+/* --------------------
+ACTIVE GAME
+---------------------*/
+.tf-calendar-select {
+  background: var(--blau--hell-stream);
+}
+
+/* --------------------
+RESULTS
+---------------------*/
+#streamadmin[sa-has-veto="false"] [sa-results="empty"],
+#streamadmin[sa-has-veto="true"] [sa-results="active"] {
+  display: flex;
+}
+#streamadmin[sa-has-veto="true"] [sa-results="empty"],
+#streamadmin[sa-has-veto="false"] [sa-results="active"] {
+  display: none;
+}

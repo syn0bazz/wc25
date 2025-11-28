@@ -1,0 +1,31 @@
+.team_top {
+  overflow-x: hidden;
+}
+.team_player-avatar:nth-child(2) {
+  transform: translateX(-30px) scaleX(-1);
+  z-index: 1;
+}
+.team_player-avatar:nth-child(1) {
+  transform: translateX(30px);
+  z-index: 2;
+}
+.team:hover {
+  transform: translateY(-2px);
+}
+.team:hover .team_bottom {
+  background-color: var(--violett--hell);
+  text-shadow: 1px 1px 0px var(--violett--dunkel);
+  box-shadow: 3px 5px 0px var(--violett--dunkel);
+}
+.team:hover .team_avatar {
+  border-color: var(--violett--highlight);
+}
+.team:hover .team_player-avatar:nth-child(2) {
+  transform: translateX(-36px) scaleX(-1);
+}
+.team:hover .team_player-avatar:nth-child(1) {
+  transform: translateX(36px);
+}
+.team:hover .team_top {
+  background-image: linear-gradient(#fe94ee00 15%, #fe94ee9e);
+}

@@ -1,0 +1,441 @@
+/* code block #2 — styles-newseditor.css */
+:root {
+  --sa-bg: #0b0b0d; /* dark mode friendly */
+  --sa-surface: #121217;
+  --sa-surface-2: #171822;
+  --sa-border: #262738;
+  --sa-text: #e8eaf1;
+  --sa-muted: #9aa0b4;
+  --sa-accent: #7aa2ff;
+  --sa-accent-2: #54d6bb;
+  --sa-danger: #ff6b6b;
+  --sa-radius: 14px;
+  --sa-gap: 12px;
+  --sa-pad: 16px;
+  --sa-shadow: 0 6px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --sa-font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+#newsEditor.sa-wrap {
+  font-family: var(--sa-font);
+  color: var(--sa-text);
+  background: transparent;
+  display: grid;
+  gap: var(--sa-gap);
+}
+
+.sa-card {
+  background: var(--sa-surface);
+  border: 1px solid var(--sa-border);
+  border-radius: var(--sa-radius);
+  padding: calc(var(--sa-pad) + 2px);
+  box-shadow: var(--sa-shadow);
+}
+
+.sa-title {
+  font-size: 1.25rem;
+  margin: 0 0 6px;
+}
+.sa-title-sm {
+  font-size: 1.05rem;
+  margin: 0 0 8px;
+}
+.sa-muted {
+  color: var(--sa-muted);
+}
+.sa-help {
+  color: var(--sa-muted);
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+.sa-status {
+  margin-top: 8px;
+  min-height: 1.25rem;
+  font-size: 0.95rem;
+  color: var(--sa-muted);
+}
+.sa-label {
+  display: block;
+  font-weight: 600;
+  margin: 6px 0;
+}
+.sa-inputrow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.sa-inputrow--stack {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.sa-input,
+.sa-textarea {
+  width: 100%;
+  background: var(--sa-surface-2);
+  color: var(--sa-text);
+  border: 1px solid var(--sa-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+}
+.sa-input:focus,
+.sa-textarea:focus {
+  border-color: var(--sa-accent);
+  box-shadow: 0 0 0 3px rgba(122, 162, 255, 0.15);
+}
+
+.sa-btn {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 14px;
+  background: var(--sa-surface-2);
+  border: 1px solid var(--sa-border);
+  color: var(--sa-text);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.02s ease, background 0.15s ease,
+    border-color 0.15s ease;
+}
+.sa-btn:active {
+  transform: translateY(1px);
+}
+.sa-btn--primary {
+  background: linear-gradient(180deg, var(--sa-accent), #4c7fff);
+  color: #0a0f1f;
+  border-color: transparent;
+}
+.sa-btn--quiet {
+  background: transparent;
+  border-color: var(--sa-border);
+  color: var(--sa-muted);
+}
+.sa-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Material Symbols tweaks */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+.sa-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sa-auth-head {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+.sa-auth-row {
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.sa-user {
+  display: grid;
+  gap: 10px;
+}
+.sa-user-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.sa-user-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  background: var(--sa-accent-2);
+  color: #081a16;
+  font-weight: 800;
+}
+.sa-user-meta {
+  display: grid;
+  gap: 2px;
+}
+.sa-user-line {
+  line-height: 1.2;
+}
+
+.sa-auth-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sa-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.sa-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.sa-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.sa-item {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--sa-border);
+  border-radius: 12px;
+  background: var(--sa-surface-2);
+}
+.sa-item-body {
+}
+.sa-item-text {
+  width: 100%;
+  min-height: 2.6em;
+  resize: vertical;
+  background: transparent;
+  color: var(--sa-text);
+  border: 1px dashed var(--sa-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.sa-item-text:focus {
+  border-color: var(--sa-accent);
+  box-shadow: 0 0 0 3px rgba(122, 162, 255, 0.08);
+}
+
+/* New row wrapper: meta left, actions right */
+.sa-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sa-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.92rem;
+}
+.sa-meta-line {
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+  color: var(--sa-muted);
+}
+
+/* Actions stay at far right */
+.sa-item-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.sa-actions-sep {
+  display: inline-block;
+  width: 14px; /* margin between order buttons and save/delete */
+  height: 1px;
+}
+
+.sa-iconbtn {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--sa-border);
+  color: var(--sa-text);
+  cursor: pointer;
+}
+.sa-iconbtn:hover {
+  background: #1a1c29;
+}
+.sa-iconbtn.sa-danger {
+  border-color: rgba(255, 107, 107, 0.3);
+  color: var(--sa-danger);
+}
+.sa-iconbtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sa-foot {
+  padding: 2px 4px;
+}
+.sa-foot .sa-muted {
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .sa-auth-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sa-row-between {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .sa-auth-row {
+    flex-wrap: wrap;
+  }
+  .sa-item-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+
+[data-ne] [hidden] {
+  display: none !important;
+}
+
+.sa-list-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sa-list-head--with-status {
+  grid-template-columns: 1fr 1fr auto;
+}
+
+.sa-head-center {
+  justify-self: center;
+  text-align: center;
+}
+
+.sa-status {
+  font-size: 0.875rem;
+  line-height: 1.2;
+  opacity: 0.85;
+}
+
+/* === Game section (sa-game) === */
+.sa-game .sa-game-actions {
+  display: flex;
+  gap: 8px;
+  justify-self: end;
+}
+
+.sa-game-layout {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: var(--sa-gap);
+  align-items: start;
+}
+
+.sa-game-current {
+  background: var(--sa-surface-2);
+  border: 1px solid var(--sa-border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.sa-game-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.sa-vs {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #1b1d2b;
+  border: 1px solid var(--sa-border);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  color: var(--sa-muted);
+}
+
+.sa-team {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.sa-team-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #0e101a;
+  border: 1px solid var(--sa-border);
+}
+.sa-team-meta {
+  display: grid;
+  line-height: 120%;
+}
+.sa-team-name {
+  font-weight: 700;
+}
+.sa-team-tag {
+  font-size: 0.9rem;
+  color: var(--sa-muted);
+}
+
+.sa-game-meta {
+  margin-top: 10px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.sa-game-select {
+  background: var(--sa-surface-2);
+  border: 1px solid var(--sa-border);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+@media (max-width: 860px) {
+  .sa-game-layout {
+    grid-template-columns: 1fr;
+  }
+  .sa-game-actions {
+    justify-self: start;
+  }
+}
+
+.sa-wrap h3 {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 150%;
+}
+.sa-wrap h4 {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 150%;
+}
+.sa-label {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 150%;
+}
+
+.sa-card.sa-game {
+  margin-top: 8px;
+}

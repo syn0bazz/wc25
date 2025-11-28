@@ -1,0 +1,106 @@
+/* FLOW NINJA CSS */
+.swiper-button-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.upcoming_slide.swiper-slide {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+}
+.upcoming_list.swiper-wrapper {
+  -webkit-transform-style: preserve-3d;
+}
+
+/* CUSTOM CSS 
+.swiper {
+  overflow: visible;
+  width: "100%";
+}
+.swiper-slide {
+  transition: opacity 0.2s;
+}
+.swiper-slide-inview {
+  opacity: 1;
+}
+.swiper-slide-notinview {
+  opacity: 0.2;
+}*/
+
+/*Add code for smooth scrolling*/
+.marquee_list {
+  -webkit-transition-timing-function: linear !important;
+  -o-transition-timing-function: linear !important;
+  transition-timing-function: linear !important;
+}
+
+.marquee_item.swiper-slide {
+  display: flex;
+}
+
+#upcoming .swiper-slide,
+#vods .swiper-slide,
+#medaillen .swiper-slide,
+#aftermovie .swiper-slide,
+#stats .swiper-slide {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms ease-in-out, visibility 200ms ease-in-out;
+}
+#upcoming .swiper-slide-active,
+#vods .swiper-slide-active,
+#medaillen .swiper-slide-active,
+#aftermovie .swiper-slide-active,
+#stats .swiper-slide-active {
+  opacity: 1;
+  visibility: visible;
+}
+#upcoming .swiper-slide-active + .swiper-slide {
+  opacity: 1;
+  visibility: visible;
+}
+#upcoming .swiper-slide-active + .swiper-slide + .swiper-slide {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* PAGINATION */
+.swiper-pagination {
+  position: relative;
+}
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  width: auto;
+  top: auto;
+  bottom: auto;
+}
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  opacity: 0.5;
+  background: none;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.swiper-pagination-bullet:hover {
+  transform: scale(1.15);
+  opacity: 0.75;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  opacity: 1;
+  cursor: default;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active:hover {
+  transform: scale(1);
+}
+
+/* ARROWS */
+.pagination_button svg {
+  transition: transform 0.2s;
+}
+.pagination_button.pagination_button-prev svg {
+  transform: rotateZ(180deg);
+}
+.pagination_button.pagination_button-prev:hover svg {
+  transform: rotateZ(180deg) translateX(5px);
+}
+.pagination_button.pagination_button-next:hover svg {
+  transform: translateX(5px);
+}

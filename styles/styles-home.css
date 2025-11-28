@@ -1,0 +1,37 @@
+/* === HERO === */
+.heroswiper_mask.swiper-wrapper {
+  position: absolute;
+}
+.heroswiper_slide.swiper-slide {
+  display: flex;
+}
+
+/* === VOD === */
+.vod_slide .vod_button .navitem_link {
+  transform: translateY(-160%);
+}
+.vod_slide:hover .vod_button .navitem_link {
+  transform: translateY(0%);
+}
+.vod_button .navitem_link .navitem_arrow {
+  transition: transform 0.2s;
+}
+.vod_button .navitem_link:hover .navitem_arrow {
+  transform: translate3d(3px, -3px, 0px);
+}
+@media screen and (max-width: 991px) {
+  .vod_slide .vod_button .navitem_link {
+    transform: translateY(0%);
+  }
+}
+
+/* === UPCOMING === */
+#upcoming .gamev_wrap:hover .gamev_subtitle {
+  max-height: 20px;
+}
+
+@media screen and (max-height: 640px) {
+  .hero_team {
+    display: none;
+  }
+}

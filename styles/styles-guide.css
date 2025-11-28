@@ -1,0 +1,230 @@
+/* === HERO === */
+
+@media only screen and (min-width: 992px) {
+  .hero.hero-handbuch {
+    filter: drop-shadow(8px 0px 0px var(--blau--dunkel))
+      drop-shadow(4px 0px 64px #191f24) drop-shadow(4px 0px 64px #191f24);
+  }
+  .hero_inner.hero_inner-handbuch {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    /* Erst die Verlaufsmaske für die rechten 90% */
+    mask-image: linear-gradient(
+        to right,
+        black calc(100% - 100px),
+        transparent calc(100% - 100px)
+      ),
+      url("https://cdn.prod.website-files.com/66d5abacd1e75804e6fc3f44/67054718d188fd925216de0f_divider-blatt-vert.svg");
+    -webkit-mask-image: linear-gradient(
+        to right,
+        black calc(100% - 100px),
+        transparent calc(100% - 100px)
+      ),
+      url("https://cdn.prod.website-files.com/66d5abacd1e75804e6fc3f44/67054718d188fd925216de0f_divider-blatt-vert.svg");
+
+    /* Die Größe der SVG-Maske wird auf automatische Breite und 100% Höhe gesetzt */
+    mask-size: auto 100%, 100px auto;
+    -webkit-mask-size: auto 100%, 100px auto;
+
+    /* Verlaufsmaske wird über die gesamte Breite angewendet */
+    mask-position: left, right;
+    -webkit-mask-position: left, right;
+
+    /* Keine Wiederholung der Masken */
+    mask-repeat: no-repeat, no-repeat;
+    -webkit-mask-repeat: no-repeat, no-repeat;
+
+    /* Beide Masken überlagern sich */
+    mask-composite: add;
+    -webkit-mask-composite: add;
+  }
+}
+
+/* === MENU === */
+
+.vertnav_item:has(.vertnav_link.w--current) .vertnav_mask {
+  max-height: 280px;
+  opacity: 1;
+}
+.vertnav_link.w--current .vertnav_kreis,
+.vertnav_link:hover .vertnav_kreis {
+  opacity: 1;
+  transform: scale(1);
+}
+.vertnav_link.w--current .vertnav_expand,
+.vertnav_link:hover .vertnav_expand {
+  opacity: 1;
+}
+.vertnav_link.w--current .vertnav_kreis {
+  background-image: linear-gradient(
+    90deg,
+    var(--violett--hell),
+    var(--blau--hell)
+  );
+}
+.vertnav_link:not(.w--current):hover .vertnav_kreis {
+  background: linear-gradient(
+      0deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(97, 150, 194, 0.4) 100%
+    ),
+    var(--blau--dunkel);
+}
+.vertnav_submenu .submenu_item {
+  padding: 4px 12px;
+  font-size: 16px;
+}
+
+.hero_inner.hero_inner-handbuch {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 991px) {
+  .vertnav_link .vertnav_kreis {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .vertnav_link .vertnav_expand {
+    opacity: 1;
+  }
+  .vertnav_link:not(.w--current) .vertnav_kreis {
+    background: linear-gradient(
+        0deg,
+        rgba(139, 200, 255, 0.4) 0%,
+        rgba(97, 150, 194, 0.4) 100%
+      ),
+      var(--blau--dunkel);
+  }
+}
+
+/* === HANDBUCH SECTIONS === */
+
+@media screen and (min-width: 992px) {
+  .hbsection {
+    width: calc(75vw + 100px);
+    max-width: calc(100vw - 380px + 100px);
+    min-width: calc(100vw - 400px + 100px);
+  }
+}
+.hbsection {
+  opacity: 0.25;
+  filter: blur(4px);
+  transition: opacity 0.6s, filter 0.6s;
+}
+.hbsection:has(.hbsection_trigger.w--current) {
+  opacity: 1;
+  filter: blur(0px);
+}
+
+/* === PAGE BG === */
+
+@media screen and (min-width: 992px) {
+  .page_bg {
+    width: calc(75vw + 100px);
+    max-width: calc(100vw - 380px + 100px);
+    min-width: calc(100vw - 600px + 100px);
+  }
+}
+
+/* === FOOTER === */
+
+@media screen and (min-width: 992px) {
+  .footer.footer-handbuch {
+    width: calc(75vw + 100px);
+    max-width: calc(100vw - 380px + 100px);
+    min-width: calc(100vw - 600px + 100px);
+  }
+  .footer.footer-handbuch .footer_bottom {
+    padding-left: 140px;
+  }
+}
+
+/* === RICH TEXT === */
+
+.hbrtf blockquote {
+  position: relative;
+}
+
+.hbrtf blockquote::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-left: 6px solid transparent;
+  border-radius: 16px; /* Optional: falls abgerundete Ecken gewünscht sind */
+  background: linear-gradient(
+    to top,
+    var(--blau--highlight),
+    var(--violett--highlight)
+  );
+  background-clip: border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: border 0.3s ease;
+}
+
+#main-guide .glitch {
+  margin: 0;
+}
+
+/* === ACCORDION === */
+
+/* Accordion content: smooth height + opacity */
+.hbmaps_item [fs-accordion-element="content"] {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* Active item: expanded */
+.hbmaps_item.is-active-accordion [fs-accordion-element="content"] {
+  max-height: 1000px; /* should be safely larger than your content */
+  opacity: 1;
+}
+
+/* Arrow rotation */
+.hbmaps_item [fs-accordion-element="arrow"] {
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
+}
+
+.hbmaps_link:hover .hbmaps_subtitle,
+.hbmaps_item.is-active-accordion .hbmaps_subtitle {
+  color: var(--blau--text-sekundär);
+}
+
+.hbmaps_item.is-active-accordion [fs-accordion-element="arrow"] {
+  transform: rotate(180deg);
+}
+
+.hbmaps_item.is-active-accordion .hbmaps_link {
+  color: var(--grau--offwhite);
+  background: linear-gradient(
+      90deg,
+      rgba(254, 148, 238, 0.4) 0%,
+      rgba(139, 200, 255, 0.4) 100%
+    ),
+    #151515;
+  border: 1px solid var(--violett--highlight);
+}
+
+.hbmaps_item.is-active-accordion {
+  margin-top: 36px;
+  margin-bottom: 36px;
+}
+
+.hbmaps_item .hbmaps_content {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+.hbmaps_item.is-active-accordion .hbmaps_content {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}

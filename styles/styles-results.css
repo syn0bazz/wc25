@@ -1,0 +1,112 @@
+/* TAB MENU PILL MOVING */
+.tabs_link:nth-child(1):not(.is--active):hover ~ .tabs_pill-mover .tabs_pill {
+  transform: translateX(-10px);
+}
+.tabs_link:nth-child(2):not(.is--active):hover ~ .tabs_pill-mover .tabs_pill {
+  transform: translateX(10px);
+}
+
+/* === KO-ARROWS === */
+/* Die anderen beiden sind nativ in WF gesetzt */
+.koarrow_position.koarrow_position-1 {
+  left: calc(25% - 36px);
+}
+.koarrow_position.koarrow_position-2 {
+  left: calc(75% + 36px);
+}
+
+/* Basisstil für .koarrow */
+.koarrow {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Standardstil für das ::before-Element */
+.koarrow::before {
+  content: "";
+  position: absolute;
+  top: -100%; /* Start oberhalb des Elements */
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    #fe94ee00,
+    var(--violett--highlight) 50%,
+    #fe94ee00
+  );
+  animation: koarrow-vertical 2s linear infinite;
+  animation-delay: 0s;
+}
+
+/* Animation für das erste Element ohne Verzögerung */
+.koarrow_position:nth-child(1) .koarrow::before {
+  animation-delay: 0s;
+}
+
+/* Animation für das zweite Element mit 0.5s Verzögerung */
+.koarrow_position:nth-child(2) .koarrow::before {
+  animation-delay: 0.5s;
+}
+
+/* Vertikale Animation von -100% zu +200% */
+@keyframes koarrow-vertical {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(200%);
+  }
+}
+
+/* Stil für .koarrow mit zusätzlicher Klasse .koarrow-quer */
+.koarrow.koarrow-quer::before {
+  top: 0;
+  left: -100%; /* Start links außerhalb des Elements */
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    #fe94ee00,
+    var(--violett--highlight) 50%,
+    #fe94ee00
+  );
+  animation: koarrow-horizontal 2s linear infinite;
+  animation-delay: 1s;
+}
+
+/* Horizontale Animation von -100% zu +200% */
+@keyframes koarrow-horizontal {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
+
+/* Stil für .koarrow mit zusätzlicher Klasse .koarrow-diagonal */
+.koarrow.koarrow-diagonal::before {
+  top: -100%;
+  left: 100%;
+  width: 200%; /* Größer, um die Diagonale abzudecken */
+  height: 200%;
+  background: linear-gradient(
+    240deg,
+    #8bc8ff00,
+    var(--blau--highlight) 50%,
+    #8bc8ff00
+  );
+  animation: koarrow-diagonal 2s linear infinite;
+  animation-delay: 0.5s;
+}
+
+/* Diagonale Animation von (100%, -100%) zu (-200%, 200%) */
+@keyframes koarrow-diagonal {
+  from {
+    transform: translate3d(100%, -100%, 0);
+  }
+  to {
+    transform: translate3d(-200%, 200%, 0);
+  }
+}

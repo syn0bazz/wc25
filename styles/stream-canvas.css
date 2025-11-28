@@ -1,0 +1,314 @@
+/* --------------------
+FLICKER ANIMATION
+---------------------*/
+
+/* Slight flicker like an analog projector beam */
+@keyframes projectorFlicker {
+  0% {
+    filter: brightness(1);
+  }
+  5% {
+    filter: brightness(0.99);
+  }
+  8% {
+    filter: brightness(1.01);
+  }
+  14% {
+    filter: brightness(0.98);
+  }
+  20% {
+    filter: brightness(1.02);
+  }
+  28% {
+    filter: brightness(0.99);
+  }
+  33% {
+    filter: brightness(1);
+  }
+  41% {
+    filter: brightness(1.01);
+  }
+  55% {
+    filter: brightness(0.98);
+  }
+  62% {
+    filter: brightness(1.01);
+  }
+  75% {
+    filter: brightness(0.99);
+  }
+  88% {
+    filter: brightness(1.02);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+
+.cg_inner {
+  animation: projectorFlicker 2.2s infinite linear;
+  will-change: filter;
+}
+
+/* --------------------
+GENERAL
+---------------------*/
+
+.cg_header {
+  object-fit: cover;
+
+  /* Erst die Verlaufsmaske für die oberen 90% */
+  mask-image: linear-gradient(
+      black calc(100% - 133px),
+      transparent calc(100% - 133px)
+    ),
+    url("https://cdn.prod.website-files.com/67f4e291533337f5de0b8344/69263606952bda6659cc9c09_cg_header.svg");
+  -webkit-mask-image: linear-gradient(
+      black calc(100% - 133px),
+      transparent calc(100% - 133px)
+    ),
+    url("https://cdn.prod.website-files.com/67f4e291533337f5de0b8344/69263606952bda6659cc9c09_cg_header.svg");
+
+  /* Die Größe der SVG-Maske wird auf 100% Breite und automatische Höhe gesetzt */
+  mask-size: 100% auto, auto 133px;
+  -webkit-mask-size: 100% auto, auto 133px;
+
+  /* Verlaufsmaske wird über die gesamte Höhe angewendet */
+  mask-position: top, bottom;
+  -webkit-mask-position: top, bottom;
+
+  /* Keine Wiederholung der Masken */
+  mask-repeat: no-repeat, repeat-x;
+  -webkit-mask-repeat: no-repeat, repeat-x;
+
+  /* Beide Masken überlagern sich */
+  mask-composite: add;
+  -webkit-mask-composite: add;
+}
+
+.cg_card--gradient {
+  background: linear-gradient(
+      270deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(254, 148, 238, 0.4) 100%
+    ),
+    var(--blau--hintergrund, #212b34);
+}
+
+/* --------------------
+SCORES
+---------------------*/
+
+/* T1 / T2 */
+.cgscore_team.is--t1 {
+  background: linear-gradient(
+    270deg,
+    rgba(97, 150, 194, 0.5) 0%,
+    var(--blau-hell-80, rgba(97, 150, 194, 0.8)) 50%
+  );
+  box-shadow: 4px 4px 0 0 var(--blau--Dunkel, #344b5d);
+}
+.cgscore_team.is--t2 {
+  background: linear-gradient(
+    270deg,
+    var(--blau-hell-80, rgba(97, 150, 194, 0.8)) 50%,
+    rgba(97, 150, 194, 0.5) 100%
+  );
+  box-shadow: -4px 4px 0 0 var(--blau--Dunkel, #344b5d);
+}
+
+.cgscore_team.is--t2 .cgscore_score {
+  margin: 0 0 0 -4px;
+  border-radius: 0px 24px 24px 0px;
+}
+.cgscore_team.is--t2 .cgscore_name,
+.cgscore_team.is--t2 .cgscore_hand {
+  transform: rotate(-90deg);
+}
+
+/* LEAD */
+.cgscore_team.is--t1.is--lead {
+  background: linear-gradient(
+    90deg,
+    rgba(194, 113, 181, 0.9) 50%,
+    rgba(194, 113, 181, 0.6) 100%
+  );
+  box-shadow: 4px 4px 0 0 var(--violett--dunkel, #824679);
+}
+.cgscore_team.is--t2.is--lead {
+  background: linear-gradient(
+    90deg,
+    rgba(194, 113, 181, 0.6) 0%,
+    rgba(194, 113, 181, 0.9) 50%
+  );
+  box-shadow: -4px 4px 0 0 var(--violett--dunkel, #824679);
+}
+.cgscore_team.is--lead .cgscore_score {
+  background: var(--violett--hell);
+  box-shadow: inset 4px 4px 0 0 var(--violett--dunkel);
+}
+.cgscore_team.is--lead .cgscore_score-number {
+  color: var(--violett--text-offwhite);
+  text-shadow: 4px 4px 0 var(--violett--dunkel);
+}
+.cgscore_team.is--lead .cgscore_name {
+  color: var(--violett--text-sekundär);
+}
+.cgscore_team.is--lead .cgscore_hand {
+  color: var(--blau--hell-70);
+}
+
+/* --------------------
+STATS
+---------------------*/
+
+.cgstats_wrap {
+  background: linear-gradient(
+      270deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(254, 148, 238, 0.4) 100%
+    ),
+    var(--grau--offblack, #151515);
+}
+
+/* P2 */
+.cgstats_player.is--p2 .cgstats_bg-name,
+.cgstats_player.is--p2 .cgstats_bg-hand {
+  transform: rotate(-90deg);
+}
+.cgstats_player.is--p2 .cgstats_avatar {
+  transform: scaleX(-1);
+  left: auto;
+  right: -60px;
+}
+.cgstats_player.is--p2 .cgstats_name {
+  inset: auto 24px 24px auto;
+}
+.cgstats_player.is--p2 .cgstats_hand {
+  inset: auto 16px 24px auto;
+}
+
+.cgstats_bar-gradient {
+  background: linear-gradient(
+    -90deg,
+    rgba(97, 150, 194, 0.83) 29.81%,
+    rgba(254, 148, 238, 0.83) 100%
+  );
+}
+
+/* RIGHT */
+.cgstats_wing.is--right .cgstats_bar {
+  right: auto;
+  left: 0%;
+}
+.cgstats_wing.is--right .cgstats_bar-gradient {
+  right: 4px;
+  left: 0;
+  border-radius: 0px 999px 999px 0px;
+  background: linear-gradient(
+    90deg,
+    rgba(97, 150, 194, 0.83) 29.81%,
+    rgba(254, 148, 238, 0.83) 100%
+  );
+}
+
+/* HALFTIME */
+.cg_card.is--halftime .cgstats_stats--page2 {
+  opacity: 1;
+  transform: scale(1);
+}
+.cg_card.is--halftime .cgstats_stats--page1 {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* --------------------
+MAPS
+---------------------*/
+
+.cgmaps_grid .cg_titlehand {
+  left: -13px;
+  top: 30px;
+}
+
+.cgmaps_map:first-child {
+  height: 100%;
+  z-index: 3;
+}
+.cgmaps_map:nth-child(2) {
+  z-index: 2;
+}
+.cgmaps_map:nth-child(3) {
+  z-index: 1;
+  border-bottom: none;
+}
+
+.cgmaps_map .cgmaps_votetext {
+  color: var(--blau--text-sekundär);
+}
+
+.cgmaps_bg--default,
+.cgmaps_map.is--played .cgmaps_bg--dark {
+  visibility: hidden;
+  opacity: 0;
+}
+.cgmaps_bg--dark,
+.cgmaps_map.is--played .cgmaps_bg--default {
+  visibility: visible;
+}
+.cgmaps_map.is--played .cgmaps_bg--default {
+  opacity: 0.4;
+}
+.cgmaps_map .cgmaps_bg--dark {
+  opacity: 0.2;
+}
+
+.cgmaps_map[data-is-decider="false"] .cgmaps_votetext,
+.cgmaps_map[data-is-decider="true"] .cgmaps_votelogo {
+  display: none;
+}
+.cgmaps_map[data-is-decider="true"] .cgmaps_votetext,
+.cgmaps_map[data-is-decider="false"] .cgmaps_votelogo {
+  display: block;
+}
+
+/* TOGGLE VETO */
+.cgmaps_map [data-base="t1_logo-800-iso"],
+.cgmaps_map [data-base="t2_logo-800-iso"],
+.cgmaps_votetext {
+  display: none;
+}
+.cgmaps_map[data-pick="t1"] [data-base="t1_logo-800-iso"],
+.cgmaps_map[data-pick="t2"] [data-base="t2_logo-800-iso"],
+.cgmaps_map[data-pick="dec"] .cgmaps_votetext {
+  display: block;
+}
+
+.cgstats_avatar {
+  /* ensure element can be masked */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 60%,
+    /* fully visible until 60% height */ rgba(0, 0, 0, 0.6) 100%
+      /* fade to transparent at bottom */
+  );
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-image: linear-gradient(to bottom, black 60%, rgba(0, 0, 0, 0.6) 100%);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+}
+
+/* --------------------
+NEXT
+---------------------*/
+
+.cgscore_text:last-child .cgscore_name,
+.cgscore_text:last-child .cgscore_hand {
+  transform: rotate(-90deg);
+}
+
+.cgnext_field.is--wins .cgnext_field-label {
+  color: var(--violett--text-sekundär);
+}

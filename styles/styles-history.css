@@ -1,0 +1,73 @@
+/* === TURNIERE === */
+.turnier_team.is--highlight .turnier_team-inner .turnier_players {
+  color: var(--violett--text-sekundär);
+}
+.turnier_team.is--highlight .turnier_kreis {
+  background: linear-gradient(
+      270deg,
+      rgba(139, 200, 255, 0.4) 0%,
+      rgba(254, 148, 238, 0.4) 100%
+    ),
+    #151515;
+}
+/* Hover Header gamev */
+.turnier.turnier--linked:hover .gamev_arrow {
+  transform: translate3d(2px, -2px, 0px);
+  color: var(--grau--offwhite);
+}
+.turnier.turnier--linked:hover .gamev_pill.gamev_pill-ko {
+  background-color: var(--violett--dunkel);
+  border-color: var(--violett--highlight);
+  box-shadow: inset 0px 0px #212b348c;
+}
+
+#tabelle-medaillen .statistics_primary,
+#tabelle-medaillen .statistics_secondary {
+  grid-template-columns: 90px;
+  grid-auto-columns: 90px;
+}
+#tabelle-medaillen .tabelle_columns {
+  margin-top: -92px;
+}
+#tabelle-medaillen .statistics_column {
+  padding-top: 26px;
+}
+.statistics_column.statistics_column--nohelp:hover {
+  cursor: default;
+}
+
+@media only screen and (max-width: 991px) {
+  #tabelle-medaillen .statistics_primary {
+    grid-template-columns: 90px;
+    grid-auto-columns: 90px;
+  }
+  #tabelle-medaillen .statistics_secondary {
+    grid-template-columns: 60px;
+    grid-auto-columns: 60px;
+  }
+  @media only screen and (max-width: 767px) {
+    #tabelle-medaillen .statistics_secondary > div:nth-child(n + 3) {
+      display: block;
+    }
+  }
+}
+@media only screen and (max-width: 767px) {
+  #tabelle-medaillen .statistics_primary {
+    grid-template-columns: 80px;
+    grid-auto-columns: 80px;
+  }
+  #tabelle-medaillen .statistics_secondary {
+    grid-template-columns: 48px;
+    grid-auto-columns: 48px;
+  }
+  .statistics_medaille {
+    width: 40px;
+    height: 58px;
+  }
+}
+@media only screen and (max-width: 420px) {
+  #tabelle-medaillen .statrow_team.statrow_team-player {
+    grid-template-columns: 1fr;
+    grid-row-gap: 18px;
+  }
+}
