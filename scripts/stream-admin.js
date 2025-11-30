@@ -34,6 +34,7 @@ window.SA = window.SA || {
   _wiredGameSelect: false,
   _wiredResultsSection: false,
   _wiredNewsSection: false,
+  _wiredCastSection: false,
 };
 
 var SA = window.SA;
@@ -45,6 +46,7 @@ var saCFG = {
     active: '[sa-section="active-game"]',
     results: '[sa-section="results"]',
     news: '[sa-section="news"]',
+    cast: '[sa-section="cast"]',
   },
   el: {
     pageWrap: "#streamadmin",
@@ -68,6 +70,7 @@ function initStreamAdminPage() {
   saWireActiveGameSelect();
   saWireResultsSection();
   saWireNewsSection();
+  saWireCastSection();
   saInitAuth();
 
   // Initial attributes (no active game / no veto)
@@ -289,40 +292,6 @@ function saBeforeUnloadHandler(event) {
   }
 }
 
-// [DATA LOADERS] ---------------------------------------------------------------
-async function saEnsureGamesAndTeamsLoaded() {
-  // If both are already present, keep them
-  if (
-    Array.isArray(SA.games) &&
-    SA.games.length &&
-    Array.isArray(SA.teams) &&
-    SA.teams.length
-  ) {
-    return;
-  }
-
-  var games = [];
-  var teams = [];
-
-  try {
-    games = await fetchGames();
-  } catch (err) {
-    console.warn("[stream-admin] Failed to load games:", err);
-  }
-
-  try {
-    teams = await fetchTeams();
-  } catch (err) {
-    console.warn("[stream-admin] Failed to load teams:", err);
-  }
-
-  SA.games = Array.isArray(games) ? games.slice() : [];
-  SA.teams = Array.isArray(teams) ? teams.slice() : [];
-
-  SA.gamesBySlug = indexBy(SA.games, "slug");
-  SA.teamsBySlug = indexBy(SA.teams, "slug");
-}
-
 // =============================================================================
 // AUTHENTICATION
 // =============================================================================
@@ -366,15 +335,80 @@ async function saInitAuth() {
 async function saOnAuthStateChange(payload) {
   var isSignedIn = !!payload && !!payload.isSignedIn;
   var hasPlayer = !!payload && !!payload.player;
-  var hasTeam = !!payload && !!payload.team;
 
   if (!SA.$root || SA.$root.length === 0) {
     return;
   }
 
+  // PATCH: If role_streamer is missing (undefined) but we have a player, try to find it via SLUG
+  if (
+    isSignedIn &&
+    hasPlayer &&
+    typeof payload.player.role_streamer === "undefined"
+  ) {
+    try {
+      var found = false;
+      var mySlug = payload.player.slug;
+
+      console.log("[stream-admin] Patch: Starting patch for slug:", mySlug);
+
+      if (mySlug) {
+        // 1. Try finding in global cache (base.js)
+        if (typeof fetchPlayers === "function") {
+          var allPlayers = await fetchPlayers();
+          var cached = (allPlayers || []).find(function (p) {
+            return p && p.slug === mySlug;
+          });
+
+          if (cached) {
+            payload.player.role_streamer = !!cached.role_streamer;
+            found = true;
+            console.log(
+              "[stream-admin] Patch: Found role via cache:",
+              payload.player.role_streamer
+            );
+          }
+        }
+
+        // 2. If not in cache, fetch directly via slug
+        if (!found && AppAuth && AppAuth.supabase) {
+          console.log("[stream-admin] Patch: Cache miss. Fetching via slug...");
+          var res = await AppAuth.supabase
+            .from("players")
+            .select("role_streamer")
+            .eq("slug", mySlug)
+            .maybeSingle();
+
+          if (res.data) {
+            payload.player.role_streamer = !!res.data.role_streamer;
+            console.log(
+              "[stream-admin] Patch: Direct fetch success. Role =",
+              payload.player.role_streamer
+            );
+          } else {
+            console.warn(
+              "[stream-admin] Patch: Direct fetch returned no data for slug:",
+              mySlug
+            );
+          }
+        }
+      } else {
+        console.warn(
+          "[stream-admin] Patch: Player object has no slug.",
+          payload.player
+        );
+      }
+    } catch (err) {
+      console.warn("[stream-admin] Patch failed:", err);
+    }
+  }
+
+  var isStreamer = hasPlayer && !!payload.player.role_streamer;
+
   SA.$root
     .toggleClass("is--signed-in", isSignedIn)
-    .toggleClass("is--signed-out", !isSignedIn);
+    .toggleClass("is--signed-out", !isSignedIn)
+    .toggleClass("is--streamer", isStreamer);
 
   // Toggle sections based on auth
   SA.$root.find('[data-auth="signed-in"]').prop("hidden", !isSignedIn);
@@ -391,6 +425,7 @@ async function saOnAuthStateChange(payload) {
     saRenderActiveGameSection();
     saUpdateHasVetoFlag(false);
     saResultsClear();
+    saRenderCastSection(); // Reset cast inputs
 
     // Reset news editor state
     SA.news = [];
@@ -498,6 +533,7 @@ function saRenderActiveGameSection() {
   if (!SA.activeGame) {
     $card.addClass("is--hidden");
     $empty.removeClass("is--hidden");
+    saRenderCastSection(); // Clear cast inputs
     return;
   }
 
@@ -518,6 +554,9 @@ function saRenderActiveGameSection() {
 
   // Team info for this game (used by active card + results section)
   saInsertTeamDataForActiveGame();
+
+  // Render Cast Section with active game data
+  saRenderCastSection();
 }
 
 // PREPARE ACTIVE GAME SELECT ------------------------------------------------
@@ -831,8 +870,11 @@ async function saResultsRefreshForActiveGame(forceReload) {
 
   var freshGame = game;
 
+  // Check if we need to load caster fields (in case they weren't in the initial load)
+  var needsCastData = game && typeof game.prod_cast_1_display === "undefined";
+
   // Optional fresh pull from Supabase for the active game
-  if (forceReload) {
+  if (forceReload || needsCastData) {
     try {
       var res = await AppAuth.supabase
         .from("games")
@@ -870,6 +912,9 @@ async function saResultsRefreshForActiveGame(forceReload) {
             "vote_6",
             "vote_7",
             "best_of",
+            // Added caster fields
+            "prod_cast_1_display",
+            "prod_cast_2_display",
           ].join(", ")
         )
         .eq("slug", game.slug)
@@ -898,6 +943,9 @@ async function saResultsRefreshForActiveGame(forceReload) {
             }
           );
         }
+
+        // Re-render cast section since we have fresh data
+        saRenderCastSection();
       }
     } catch (err) {
       console.warn("[stream-admin] Error reloading game:", err);
@@ -1340,6 +1388,232 @@ async function saResultsSendToSupabase() {
     alert(
       "Ergebnisse konnten nicht gespeichert werden. Bitte später erneut versuchen."
     );
+  }
+}
+
+// =============================================================================
+// CASTER NAMING SECTION
+// =============================================================================
+
+function saRenderCastSection() {
+  var $root = SA.$root && SA.$root.length ? SA.$root : $("#streamadmin");
+  if (!$root.length) return;
+
+  var $sec = $root.find(saCFG.sec.cast).first();
+  if (!$sec.length) return;
+
+  var game = SA.activeGame;
+  var val1 = "";
+  var val2 = "";
+
+  if (game) {
+    val1 = game.prod_cast_1_display || "";
+    val2 = game.prod_cast_2_display || "";
+  }
+
+  var $input1 = $sec.find('[data-cast="1"]').first();
+  var $input2 = $sec.find('[data-cast="2"]').first();
+
+  if ($input1.length) $input1.val(val1);
+  if ($input2.length) $input2.val(val2);
+}
+
+function saWireCastSection() {
+  if (SA._wiredCastSection) return;
+  SA._wiredCastSection = true;
+
+  $(document).on("click", '[data-cast-button="1"]', async function (e) {
+    e.preventDefault();
+    await saSaveCastName(1, $(this));
+  });
+
+  $(document).on("click", '[data-cast-button="2"]', async function (e) {
+    e.preventDefault();
+    await saSaveCastName(2, $(this));
+  });
+
+  $(document).on("click", '[data-cast-button="swap"]', async function (e) {
+    e.preventDefault();
+    await saSwapCastNames($(this));
+  });
+}
+
+async function saSaveCastName(slot, $btn) {
+  if (!AppAuth.supabase) {
+    alert("Supabase-Verbindung fehlt. Bitte Seite neu laden.");
+    return;
+  }
+
+  var game = SA.activeGame;
+  if (!game || !game.slug) {
+    alert("Kein aktives Spiel ausgewählt.");
+    return;
+  }
+
+  var $root = SA.$root && SA.$root.length ? SA.$root : $("#streamadmin");
+  var $sec = $root.find(saCFG.sec.cast).first();
+  var $input = $sec.find('[data-cast="' + slot + '"]').first();
+  var newValue = String($input.val() || "").trim();
+
+  // Field mapping
+  var dbField = slot === 1 ? "prod_cast_1_display" : "prod_cast_2_display";
+  var payload = {};
+  payload[dbField] = newValue;
+
+  try {
+    var res = await AppAuth.supabase
+      .from("games")
+      .update(payload)
+      .eq("slug", game.slug);
+
+    if (res.error) {
+      console.error("[stream-admin] Failed to update caster:", res.error);
+      alert(
+        "Fehler beim Speichern des Casters. Bitte später erneut versuchen."
+      );
+      return;
+    }
+
+    // Success feedback: Button checkmark
+    var originalText = $btn.text();
+    $btn.text("✅");
+    setTimeout(function () {
+      $btn.text(originalText);
+    }, 3000);
+
+    // Update local state
+    game[dbField] = newValue;
+
+    // Update cache arrays
+    if (Array.isArray(SA.games)) {
+      SA.games = SA.games.map(function (g) {
+        if (g.slug === game.slug) {
+          g[dbField] = newValue;
+        }
+        return g;
+      });
+    }
+    if (SA.gamesBySlug && SA.gamesBySlug[game.slug]) {
+      SA.gamesBySlug[game.slug][dbField] = newValue;
+    }
+
+    // Sync to global cache
+    try {
+      if (window.__supabasePreload && window.__supabasePreload.games) {
+        window.__supabasePreload.games = window.__supabasePreload.games.map(
+          function (g) {
+            if (g.slug === game.slug) {
+              g[dbField] = newValue;
+            }
+            return g;
+          }
+        );
+      }
+      if (typeof setCached === "function") {
+        setCached(LS_KEYS.games, SA.games);
+      }
+    } catch (e) {
+      console.warn("[stream-admin] Failed to sync caster update to cache:", e);
+    }
+  } catch (err) {
+    console.error("[stream-admin] Error saving caster:", err);
+    alert("Fehler beim Speichern. Bitte konsole prüfen.");
+  }
+}
+
+async function saSwapCastNames($btn) {
+  if (!AppAuth.supabase) {
+    alert("Supabase-Verbindung fehlt. Bitte Seite neu laden.");
+    return;
+  }
+
+  var game = SA.activeGame;
+  if (!game || !game.slug) {
+    alert("Kein aktives Spiel ausgewählt.");
+    return;
+  }
+
+  var $root = SA.$root && SA.$root.length ? SA.$root : $("#streamadmin");
+  var $sec = $root.find(saCFG.sec.cast).first();
+
+  var $input1 = $sec.find('[data-cast="1"]').first();
+  var $input2 = $sec.find('[data-cast="2"]').first();
+
+  var val1 = String($input1.val() || "").trim();
+  var val2 = String($input2.val() || "").trim();
+
+  // Swap logic
+  var next1 = val2;
+  var next2 = val1;
+
+  var payload = {
+    prod_cast_1_display: next1,
+    prod_cast_2_display: next2,
+  };
+
+  try {
+    var res = await AppAuth.supabase
+      .from("games")
+      .update(payload)
+      .eq("slug", game.slug);
+
+    if (res.error) {
+      console.error("[stream-admin] Failed to swap casters:", res.error);
+      alert("Fehler beim Tauschen der Caster. Bitte später erneut versuchen.");
+      return;
+    }
+
+    // Success feedback
+    var originalText = $btn.text();
+    $btn.text("✅");
+    setTimeout(function () {
+      $btn.text(originalText);
+    }, 3000);
+
+    // Update DOM
+    $input1.val(next1);
+    $input2.val(next2);
+
+    // Update local state
+    game.prod_cast_1_display = next1;
+    game.prod_cast_2_display = next2;
+
+    // Update caches
+    if (Array.isArray(SA.games)) {
+      SA.games = SA.games.map(function (g) {
+        if (g.slug === game.slug) {
+          g.prod_cast_1_display = next1;
+          g.prod_cast_2_display = next2;
+        }
+        return g;
+      });
+    }
+    if (SA.gamesBySlug && SA.gamesBySlug[game.slug]) {
+      SA.gamesBySlug[game.slug].prod_cast_1_display = next1;
+      SA.gamesBySlug[game.slug].prod_cast_2_display = next2;
+    }
+
+    try {
+      if (window.__supabasePreload && window.__supabasePreload.games) {
+        window.__supabasePreload.games = window.__supabasePreload.games.map(
+          function (g) {
+            if (g.slug === game.slug) {
+              g.prod_cast_1_display = next1;
+              g.prod_cast_2_display = next2;
+            }
+            return g;
+          }
+        );
+      }
+      if (typeof setCached === "function") {
+        setCached(LS_KEYS.games, SA.games);
+      }
+    } catch (e) {
+      console.warn("[stream-admin] Failed to sync caster swap to cache:", e);
+    }
+  } catch (err) {
+    console.error("[stream-admin] Error swapping casters:", err);
+    alert("Fehler beim Speichern. Bitte konsole prüfen.");
   }
 }
 

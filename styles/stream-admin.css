@@ -25,6 +25,20 @@ AUTH
 }
 
 /* --------------------
+STREAMER ROLE
+---------------------*/
+
+#streamadmin [data-auth-prod="true"] {
+  visibility: hidden;
+  display: none;
+}
+#streamadmin.is--streamer [data-auth-prod="true"] {
+  visibility: visible;
+  display: block;
+}
+
+
+/* --------------------
 ACTIVE GAME
 ---------------------*/
 .tf-calendar-select {

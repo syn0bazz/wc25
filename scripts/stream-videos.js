@@ -24,6 +24,7 @@ const BASE_PLAYLIST = [
   { file: "wartevideo_10.mp4", credit: "Highlights vom Wintercup '23" },
   { file: "wartevideo_11.mp4", credit: "Highlights vom Wintercup '24" },
   { file: "wartevideo_12.mp4", credit: "KiFFe auf Utopia" },
+  { file: "wartevideo_13.mp4", credit: "PfaNnE und eρı¢ im Schwarzwald" },
 ];
 
 const SHUFFLE = true;

@@ -280,7 +280,9 @@ async function ensureGamesPreloaded(force) {
         "active",
         "prod_streamer",
         "prod_cast_1",
+        "prod_cast_1_display",
         "prod_cast_2",
+        "prod_cast_2_display",
         "prod_spielleiter",
         "best_of",
       ].join(", ")

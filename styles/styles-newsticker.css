@@ -23,7 +23,7 @@
   mask-repeat: no-repeat;
 }
 .newsticker--stream .newsticker {
-  box-shadow: none;
+  box-shadow: 4px 4px #344b5dd1;
   border-radius: 999px;
   background-color: var(--blau--hell-stream);
   font-size: 26px;
