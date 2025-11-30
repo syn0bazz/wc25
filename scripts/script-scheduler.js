@@ -641,9 +641,33 @@ function tfRenderNotifications(list) {
 // [ACTIONS] -----------------------------------------------------------------
 function tfPerformNotificationAction(action) {
   if (!action || typeof action !== "object") return;
+
   try {
+    // 1. Simple Tab Switch
     if (action.type === "switch-tab" && action.tab) {
       tfActivateTab(action.tab);
+    }
+    // 2. Show specific Game in Games List (Filters list)
+    else if (action.type === "show-game" && action.slug) {
+      if (typeof eventGameBySlug === "function") {
+        eventGameBySlug(action.slug);
+      } else {
+        tfActivateTab("Spiele");
+      }
+    }
+    // 3. Show specific Game in Production List (Filters list)
+    else if (action.type === "show-production" && action.slug) {
+      if (typeof eventProductionBySlug === "function") {
+        eventProductionBySlug(action.slug);
+      } else {
+        tfActivateTab("Produktion");
+      }
+    }
+    // 4. Open Suggestor directly
+    else if (action.type === "open-suggestor" && action.slug) {
+      if (typeof eventPrefilledSuggestor === "function") {
+        eventPrefilledSuggestor(action.slug);
+      }
     }
   } catch (e) {
     console.warn("[terminfinder] tfPerformNotificationAction error:", e);
@@ -677,26 +701,12 @@ function notifGamesReply() {
   try {
     if (!window.TF) return [];
 
-    // Ensure player/role data is hydrated from preload (as required)
+    // Ensure player/role data is hydrated
     if (typeof tfUpdateProductionRoles === "function") {
-      try {
-        tfUpdateProductionRoles();
-      } catch (e) {
-        console.warn(
-          "[terminfinder] notifGamesReply tfUpdateProductionRoles failed:",
-          e
-        );
-      }
+      try { tfUpdateProductionRoles(); } catch (e) {}
     }
     if (typeof tfUpdatePlayerFromPreload === "function") {
-      try {
-        tfUpdatePlayerFromPreload();
-      } catch (e) {
-        console.warn(
-          "[terminfinder] notifGamesReply tfUpdatePlayerFromPreload failed:",
-          e
-        );
-      }
+      try { tfUpdatePlayerFromPreload(); } catch (e) {}
     }
 
     // Resolve team slug
@@ -733,6 +743,7 @@ function notifGamesReply() {
 
     // Suggestions cache
     var suggestionsByGameSlug = TF._suggestionsByGame || {};
+    // Hydrate suggestions if needed (cache fallback)
     if (
       (!suggestionsByGameSlug || !Object.keys(suggestionsByGameSlug).length) &&
       window.__supabasePreload &&
@@ -743,11 +754,9 @@ function notifGamesReply() {
         if (!row || row.status !== "open") return;
         var key = String(row.game_slug || "").toLowerCase();
         if (!key) return;
-
         if (!suggestionsByGameSlug[key]) {
           suggestionsByGameSlug[key] = row;
         } else {
-          // keep newest
           var existing = suggestionsByGameSlug[key];
           if (
             String(row.created_at || "") > String(existing.created_at || "")
@@ -765,6 +774,9 @@ function notifGamesReply() {
       if (!game) return;
 
       var slugKey = String(game.slug || "").toLowerCase();
+      var slugDisplay = String(game.slug || "").toUpperCase();
+      var gameName = game.name ? String(game.name) : "Spiel " + slugDisplay;
+      
       if (!slugKey) return;
 
       if (game.datetime) return; // scheduled -> skip
@@ -791,38 +803,34 @@ function notifGamesReply() {
       if (!enemySlug) return;
       var enemyKey = String(enemySlug || "");
       var vm = opponentInfo[enemyKey] || {};
-      var enemyName = vm.tname || enemyKey;
+      var enemyName = vm.tname || enemyKey || "Gegner";
 
       // -------------------------------------------------------
-      // 1) STATUS = "reply"  → important notification
+      // 1) STATUS = "reply"
       // -------------------------------------------------------
       if (suggestionRow && !isFromOwnTeam) {
         notifications.push({
           id: "game-reply-" + slugKey,
-          title: "Neue Terminvorschläge",
+          title: "Neue Terminvorschläge (" + slugDisplay + ")",
           description:
-            enemyName +
-            ' hat neue Vorschläge gemacht. Wechsel jetzt zu "Spiele", um darauf zu antworten.',
+            enemyName + " hat neue Vorschläge für euer " + gameName + " gemacht. Antworte jetzt darauf.",
           important: true,
-          action: { type: "switch-tab", tab: "Spiele" },
+          action: { type: "show-game", slug: game.slug },
         });
-        return; // Do NOT double-create notstarted notifications
+        return; 
       }
 
       // -------------------------------------------------------
-      // 2) STATUS = "notstarted"  → not important
-      //    Only when no suggestion exists at all.
+      // 2) STATUS = "notstarted"
       // -------------------------------------------------------
       if (!suggestionRow) {
         notifications.push({
           id: "game-notstarted-" + slugKey,
-          title: "Noch kein Termin vorgeschlagen",
+          title: "Mache erste Terminvorschläge (" + slugDisplay + ")",
           description:
-            "Für das Spiel gegen " +
-            enemyName +
-            ' wurde noch kein Terminvorschlag gemacht. Du kannst jederzeit im Tab "Spiele" starten.',
+            "Für euer " + gameName + " gegen " + enemyName + " wurden noch keine Termine vorgeschlagen. Mache jetzt den Anfang!",
           important: false,
-          action: { type: "switch-tab", tab: "Spiele" },
+          action: { type: "show-game", slug: game.slug },
         });
       }
     });
@@ -838,37 +846,23 @@ if (typeof tfRegisterNotificationProducer === "function") {
   tfRegisterNotificationProducer(notifGamesReply);
 }
 
-tfRegisterNotificationProducer(notifGamesReply);
-
 // [PRODUCTION NOTIFIER] -----------------------------------------------------
 // Registers a producer that warns about open production roles on upcoming games.
 function notifProductionRolesOpen() {
   try {
     if (!TF || !TF.player || !TF.player.slug) return [];
 
-    // -----------------------------------------------------------------------
-    // Resolve roles for current player (mirror logic from tfUpdateProductionRoles)
-    // -----------------------------------------------------------------------
-    var roles = {
-      streamer: false,
-      caster: false,
-      spielleiter: false,
-    };
-
+    // ... (Role resolution logic) ...
+    var roles = { streamer: false, caster: false, spielleiter: false };
     var playerSlugLower = String(TF.player.slug || "").toLowerCase();
 
     try {
-      if (
-        Object.prototype.hasOwnProperty.call(TF.player, "role_streamer") ||
-        Object.prototype.hasOwnProperty.call(TF.player, "role_caster") ||
-        Object.prototype.hasOwnProperty.call(TF.player, "role_spielleiter")
-      ) {
+      if (Object.prototype.hasOwnProperty.call(TF.player, "role_streamer")) {
         roles.streamer = !!TF.player.role_streamer;
         roles.caster = !!TF.player.role_caster;
         roles.spielleiter = !!TF.player.role_spielleiter;
       } else {
-        var players =
-          (window.__supabasePreload && window.__supabasePreload.players) || [];
+        var players = (window.__supabasePreload && window.__supabasePreload.players) || [];
         if (Array.isArray(players) && players.length) {
           for (var i = 0; i < players.length; i++) {
             var row = players[i];
@@ -882,32 +876,21 @@ function notifProductionRolesOpen() {
           }
         }
       }
-    } catch (eRoles) {
-      console.warn(
-        "[terminfinder] notifProductionRolesOpen role resolution error:",
-        eRoles
-      );
-    }
+    } catch (eRoles) {}
 
     var hasStreamerRole = roles.streamer;
     var hasCasterRole = roles.caster;
     var hasSpielleiterRole = roles.spielleiter;
 
-    // If the player has no production roles at all, no notifications
     if (!hasStreamerRole && !hasCasterRole && !hasSpielleiterRole) {
       return [];
     }
 
-    // -----------------------------------------------------------------------
-    // Determine games source (prefer production cache, fallback to preload)
-    // -----------------------------------------------------------------------
+    // Determine games source
     var games = [];
     if (Array.isArray(TF._productionGames) && TF._productionGames.length) {
       games = TF._productionGames;
-    } else if (
-      window.__supabasePreload &&
-      Array.isArray(window.__supabasePreload.games)
-    ) {
+    } else if (window.__supabasePreload && Array.isArray(window.__supabasePreload.games)) {
       games = window.__supabasePreload.games;
     }
 
@@ -915,8 +898,6 @@ function notifProductionRolesOpen() {
 
     var nowMs = typeof nowUtcMs === "function" ? nowUtcMs() : Date.now();
     var oneWeekMs = 7 * 24 * 60 * 60 * 1000;
-
-    var $prodList = $('[data-production="list"]').first();
     var notifications = [];
 
     function hasPlayerRoleForGame(game) {
@@ -937,77 +918,32 @@ function notifProductionRolesOpen() {
 
       var dtMs = new Date(game.datetime).getTime();
       if (!Number.isFinite(dtMs)) return;
-
-      // Only future games
       if (dtMs <= nowMs) return;
-
-      // Skip games where the user already holds any production role
       if (hasPlayerRoleForGame(game)) return;
 
-      // Determine open roles that match the player's permissions
       var openRoles = [];
-
-      if (hasStreamerRole && !game.prod_streamer) {
-        openRoles.push("Streamer");
-      }
-
-      if (hasCasterRole && (!game.prod_cast_1 || !game.prod_cast_2)) {
-        openRoles.push("Caster");
-      }
-
-      if (hasSpielleiterRole && !game.prod_spielleiter) {
-        openRoles.push("Spielleitung");
-      }
+      if (hasStreamerRole && !game.prod_streamer) openRoles.push("Streamer");
+      if (hasCasterRole && (!game.prod_cast_1 || !game.prod_cast_2)) openRoles.push("Caster");
+      if (hasSpielleiterRole && !game.prod_spielleiter) openRoles.push("Spielleitung");
 
       if (!openRoles.length) return;
 
-      // Determine warning (same semantics as "is--warning": within one week)
       var isWarning = dtMs - nowMs <= oneWeekMs;
 
-      // Resolve team names (DOM first, fallback to slugs)
-      var t1Name = game.t1_slug || "";
-      var t2Name = game.t2_slug || "";
-
-      if ($prodList && $prodList.length) {
-        var $card = $prodList
-          .find('[data-game="' + String(game.slug) + '"]')
-          .first();
-
-        if ($card && $card.length) {
-          var $t1 = $card.find('[data-base="t1"] [data-base="tname"]').first();
-          var $t2 = $card.find('[data-base="t2"] [data-base="tname"]').first();
-
-          var t1Dom = $t1 && $t1.length ? $.trim($t1.text()) : "";
-          var t2Dom = $t2 && $t2.length ? $.trim($t2.text()) : "";
-
-          if (t1Dom) t1Name = t1Dom;
-          if (t2Dom) t2Name = t2Dom;
-        }
-      }
-
-      if (!t1Name) t1Name = "Team 1";
-      if (!t2Name) t2Name = "Team 2";
-
+      // Prepare strings
       var slugUpper = String(game.slug || "").toUpperCase();
-      var t1Upper = String(t1Name || "").toUpperCase();
-      var t2Upper = String(t2Name || "").toUpperCase();
-
+      var gameName = game.name ? String(game.name) : "Spiel " + slugUpper;
+      var t1Slug = String(game.t1_slug || "??").toUpperCase();
+      var t2Slug = String(game.t2_slug || "??").toUpperCase();
+      
       notifications.push({
         id: "production-open-roles-" + String(game.slug),
-        title: "Produktion gesucht",
+        title: "Produktion gesucht (" + slugUpper + ")",
         description:
-          "Für das Spiel " +
-          slugUpper +
-          " zwischen " +
-          t1Upper +
-          " und " +
-          t2Upper +
-          " sind noch folgende Rollen offen: " +
-          openRoles.join(", ") +
-          '. Wechsel jetzt zum Tab "Produktion", um eine Rolle zu übernehmen.',
-        // Important only if the game is in warning window
+          "Für das " + gameName + " (" + t1Slug + " vs " + t2Slug + ") werden noch gesucht: " +
+          openRoles.join(", ") + '.',
         important: !!isWarning,
-        action: { type: "switch-tab", tab: "Produktion" },
+        action: { type: "show-production", slug: game.slug },
       });
     });
 

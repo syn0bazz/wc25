@@ -2,6 +2,8 @@
 // Assumes jQuery and base.js are loaded (base.js initializes supabaseClient and fires "supabase:ready").
 
 (function () {
+  let activeGameId = null; // We store the ID to filter Realtime events
+
   // Run as soon as Supabase is ready
   if (window.supabaseClient) {
     init();
@@ -14,27 +16,55 @@
   function init() {
     // 1. Build the static elements (Logos, Names, Tags) ONCE
     buildStatic().then(() => {
-      // 2. Fetch scores immediately
+      // 2. Fetch scores immediately (initial state)
       updateScores();
 
-      // 3. Set interval to refetch scores every 60s
-      setInterval(() => {
-        updateScores().catch(console.error);
-      }, 60000);
+      // 3. Start Realtime Listener (replaces setInterval)
+      if (activeGameId) {
+        startRealtimeListener();
+      }
     });
   }
 
   /**
-   * Loads the active game to get Team Slugs, then fetches Team details
-   * and renders the sidebar structure (Logos, Names, Tags).
-   * Only runs once on page load.
+   * Helper function to update the DOM based on score values.
+   * Used by both the initial fetch and Realtime updates.
+   */
+  function renderScores(s1, s2) {
+    const $wrap = $('[data-base="wrap"]');
+
+    // Update Score Text (only if not null)
+    if (s1 !== null && s1 !== undefined) {
+      $('[data-base="t1_score_total"]').text(s1);
+    }
+    if (s2 !== null && s2 !== undefined) {
+      $('[data-base="t2_score_total"]').text(s2);
+    }
+
+    // Handle Winner Classes
+    // Reset classes first
+    $wrap.removeClass("is--w1 is--w2");
+
+    // Apply class only if both scores exist and are not tied
+    if (s1 !== null && s2 !== null) {
+      if (s1 > s2) {
+        $wrap.addClass("is--w1");
+      } else if (s2 > s1) {
+        $wrap.addClass("is--w2");
+      }
+    }
+  }
+
+  /**
+   * Loads the active game to get Team Slugs, fetches Team details,
+   * renders the sidebar structure, and captures the Game ID.
    */
   async function buildStatic() {
     try {
-      // Get the active game just to find out WHO is playing
+      // Added "id" to selection so we can subscribe to it specifically
       const { data: gamesData, error: gamesError } = await supabaseClient
         .from("games")
-        .select("t1_slug, t2_slug")
+        .select("id, t1_slug, t2_slug")
         .eq("active", true)
         .order("datetime", { ascending: false })
         .limit(1);
@@ -46,6 +76,9 @@
         console.warn("[seitenleiste] No active game or missing slugs found.");
         return;
       }
+
+      // Store the ID for the Realtime subscription
+      activeGameId = activeGame.id;
 
       // Fetch details for both teams
       const { data: teamsData, error: teamsError } = await supabaseClient
@@ -98,50 +131,51 @@
   }
 
   /**
-   * Fetches ONLY the scores for the active game.
-   * Runs immediately and then every 60s.
-   * Bypasses local storage cache by using raw supabaseClient query.
+   * Fetches scores once (Initial Load).
    */
   async function updateScores() {
     try {
-      const { data: gamesData, error: gamesError } = await supabaseClient
+      if (!activeGameId) return;
+
+      const { data, error } = await supabaseClient
         .from("games")
         .select("t1_score_total, t2_score_total")
-        .eq("active", true)
-        .order("datetime", { ascending: false })
-        .limit(1);
+        .eq("id", activeGameId) // Query by ID since we have it now
+        .single();
 
-      if (gamesError) throw gamesError;
-      const activeGame = Array.isArray(gamesData) ? gamesData[0] : null;
-
-      if (!activeGame) return;
-
-      const s1 = activeGame.t1_score_total;
-      const s2 = activeGame.t2_score_total;
-      const $wrap = $('[data-base="wrap"]');
-
-      // 1. Update Score Text (only if not null)
-      if (s1 !== null && s1 !== undefined) {
-        $('[data-base="t1_score_total"]').text(s1);
-      }
-      if (s2 !== null && s2 !== undefined) {
-        $('[data-base="t2_score_total"]').text(s2);
-      }
-
-      // 2. Handle Winner Classes
-      // Reset classes first
-      $wrap.removeClass("is--w1 is--w2");
-
-      // Apply class only if both scores exist and are not tied
-      if (s1 !== null && s2 !== null) {
-        if (s1 > s2) {
-          $wrap.addClass("is--w1");
-        } else if (s2 > s1) {
-          $wrap.addClass("is--w2");
-        }
+      if (error) throw error;
+      if (data) {
+        renderScores(data.t1_score_total, data.t2_score_total);
       }
     } catch (err) {
       console.error("[seitenleiste] Failed to update scores:", err);
     }
+  }
+
+  /**
+   * Sets up the Realtime subscription for the active game.
+   */
+  function startRealtimeListener() {
+    console.log("[seitenleiste] Initializing Realtime for Game ID:", activeGameId);
+    
+    supabaseClient
+      .channel("sidebar-score-updates")
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "games",
+          filter: `id=eq.${activeGameId}`, // Only listen to this specific game
+        },
+        (payload) => {
+          // Payload.new contains the updated record
+          const newRec = payload.new;
+          if (newRec) {
+            renderScores(newRec.t1_score_total, newRec.t2_score_total);
+          }
+        }
+      )
+      .subscribe();
   }
 })();
